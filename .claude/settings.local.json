@@ -9,7 +9,8 @@
       "Bash(npx tsc:*)",
       "Bash(npx vite:*)",
       "Bash(npx supabase:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(npm run:*)"
     ]
   }
 }
