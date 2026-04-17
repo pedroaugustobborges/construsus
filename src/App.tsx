@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, CssBaseline, CircularProgress, Box } from '@mui/material';
 import { theme } from '@/theme';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth, AuthProvider } from '@/hooks/useAuth';
 import { LoginPage } from '@/components/auth/LoginPage';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { DashboardPage } from '@/components/dashboard/DashboardPage';
@@ -66,7 +66,9 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <AppRoutes />
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
       </BrowserRouter>
     </ThemeProvider>
   );
