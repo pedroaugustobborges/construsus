@@ -35,11 +35,28 @@ export function LoginPage() {
     }
     setLoading(true);
     setError(null);
-    const { error: authError } = await signIn(email, password);
-    if (authError) {
-      setError('Email ou senha inválidos. Verifique suas credenciais.');
+    try {
+      const { error: authError } = await signIn(email, password);
+      if (authError) {
+        // Mostra mensagem baseada no código do erro
+        const msg = authError.message ?? '';
+        if (msg.includes('Invalid login') || msg.includes('invalid_credentials')) {
+          setError('Email ou senha incorretos.');
+        } else if (msg.includes('Email not confirmed')) {
+          setError('E-mail não confirmado. Verifique sua caixa de entrada.');
+        } else if (msg.includes('User not found')) {
+          setError('Usuário não encontrado. Solicite cadastro ao administrador.');
+        } else {
+          setError(`Erro ao entrar: ${msg || 'Tente novamente.'}`);
+        }
+      }
+      // Se não há erro, o AuthProvider detecta a sessão automaticamente e redireciona
+    } catch (err) {
+      console.error('Login exception:', err);
+      setError('Falha de conexão. Verifique sua internet e tente novamente.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
