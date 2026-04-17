@@ -58,6 +58,60 @@ export interface CostReference {
   created_at: string;
 }
 
+export interface SinapiInsumo {
+  id: string;
+  codigo: number;
+  descricao: string;
+  classificacao: string | null;
+  unidade: string | null;
+  origem_preco: string | null;
+  preco_go: number | null;
+  preco_sp: number | null;
+  preco_df: number | null;
+  data_referencia: string;
+}
+
+export interface SinapiComposicao {
+  id: string;
+  codigo: string | null;
+  descricao: string;
+  grupo: string | null;
+  unidade: string | null;
+  custo_go: number | null;
+  pct_as_go: number | null;
+  custo_sp: number | null;
+  data_referencia: string;
+}
+
+export interface SigemEquipamento {
+  id: string;
+  codigo: string;
+  nome: string;
+  definicao: string | null;
+  classificacao: string | null;
+  valor_sugerido: number | null;
+  dolarizado: boolean;
+  especificacao: string | null;
+  data_referencia: string;
+}
+
+export interface SomasusLinha {
+  id: string;
+  hierarquia: string;
+  nivel: number;
+  codigo: string | null;
+  banco: string | null;
+  descricao: string;
+  unidade: string | null;
+  quantidade: number | null;
+  tipo_linha: 'secao' | 'item';
+  grupo_principal: string | null;
+  subgrupo: string | null;
+  tipologia: string;
+  area_construida: number;
+  data_referencia: string;
+}
+
 export interface ChatState {
   conversations: Conversation[];
   activeConversationId: string | null;

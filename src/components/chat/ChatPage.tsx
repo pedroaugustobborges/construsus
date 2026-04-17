@@ -29,8 +29,6 @@ import {
   Delete,
   Chat as ChatIcon,
   AutoAwesome,
-  ContentCopy,
-  ThumbUp,
 } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
 import { useConversations, useMessages } from '@/hooks/useConversations';
@@ -46,7 +44,7 @@ const SUGGESTED_PROMPTS = [
 ];
 
 export function ChatPage() {
-  const { user, profile } = useAuth();
+  const { user, profile, session } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
@@ -107,9 +105,11 @@ export function ChatPage() {
     setIsAiLoading(true);
 
     try {
-      // Call the Supabase Edge Function
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData.session?.access_token;
+      // Use session from AuthContext (already validated, auto-refreshed)
+      const token = session?.access_token;
+      if (!token) {
+        throw new Error('Sessão expirada. Por favor, faça login novamente.');
+      }
 
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-with-ai`,
@@ -117,7 +117,8 @@ export function ChatPage() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`,
+            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
           },
           body: JSON.stringify({
             message: content,

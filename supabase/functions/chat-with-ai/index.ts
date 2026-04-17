@@ -229,26 +229,41 @@ serve(async (req) => {
   }
 
   try {
-    // Auth check
+    // Auth check — decode JWT locally (platform already validates signature)
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
-    // Verify JWT
     const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    if (authError || !user) {
+    let userId: string | undefined;
+    try {
+      // JWT payload is base64url — convert to standard base64 before atob()
+      const b64url = token.split(".")[1];
+      const b64 = b64url.replace(/-/g, "+").replace(/_/g, "/").padEnd(
+        b64url.length + (4 - b64url.length % 4) % 4, "="
+      );
+      const claims = JSON.parse(atob(b64)) as { sub?: string; exp?: number; role?: string };
+      // Reject anon/service tokens — only real user sessions
+      if (!claims.sub || claims.role === "anon" || claims.role === "service_role") {
+        throw new Error("not a user session");
+      }
+      // Reject expired tokens
+      if (claims.exp && claims.exp < Math.floor(Date.now() / 1000)) {
+        throw new Error("token expired");
+      }
+      userId = claims.sub;
+    } catch {
       return new Response(JSON.stringify({ error: "Invalid token" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
     const body = await req.json() as {
       message: string;
@@ -264,46 +279,33 @@ serve(async (req) => {
       });
     }
 
-    // ── STEP 1: Generate embedding for the query ──────────────────────────────
-    const queryEmbedding = await getEmbedding(message);
+    // ── STEP 1-6: RAG pipeline (fail-safe — errors produce empty context) ─────
+    let finalContext: RankedDoc[] = [];
+    try {
+      const queryEmbedding = await getEmbedding(message);
+      const metadataFilters = extractMetadataFilters(message);
+      const queryVariations = await expandQuery(message);
 
-    // ── STEP 2: Extract metadata filters ─────────────────────────────────────
-    const metadataFilters = extractMetadataFilters(message);
+      const allVectorLists: Array<{ id: string; content: string; metadata: Record<string, unknown> }[]> = [];
+      const allBm25Lists: Array<{ id: string; content: string; metadata: Record<string, unknown> }[]> = [];
 
-    // ── STEP 3: Query Expansion ───────────────────────────────────────────────
-    const queryVariations = await expandQuery(message);
+      await Promise.all(
+        queryVariations.map(async (variant) => {
+          const varEmbedding = variant === message ? queryEmbedding : await getEmbedding(variant);
+          const [vectorResults, bm25Results] = await Promise.all([
+            vectorSearch(supabase, varEmbedding, metadataFilters, TOP_K_VECTOR),
+            bm25Search(supabase, variant, metadataFilters, TOP_K_BM25),
+          ]);
+          allVectorLists.push(vectorResults);
+          allBm25Lists.push(bm25Results);
+        })
+      );
 
-    // ── STEP 4: Hybrid Search (Semantic + BM25) for all query variations ──────
-    const allVectorLists: Array<{ id: string; content: string; metadata: Record<string, unknown> }[]> = [];
-    const allBm25Lists: Array<{ id: string; content: string; metadata: Record<string, unknown> }[]> = [];
-
-    await Promise.all(
-      queryVariations.map(async (variant) => {
-        const varEmbedding = variant === message
-          ? queryEmbedding
-          : await getEmbedding(variant);
-
-        const [vectorResults, bm25Results] = await Promise.all([
-          vectorSearch(supabase, varEmbedding, metadataFilters, TOP_K_VECTOR),
-          bm25Search(supabase, variant, metadataFilters, TOP_K_BM25),
-        ]);
-
-        allVectorLists.push(vectorResults);
-        allBm25Lists.push(bm25Results);
-      })
-    );
-
-    // ── STEP 5: Reciprocal Rank Fusion ────────────────────────────────────────
-    const allLists = [...allVectorLists, ...allBm25Lists];
-    const fusedResults = reciprocalRankFusion(allLists);
-    const top30 = fusedResults.slice(0, 30);
-
-    // ── STEP 6: Cross-Encoder Re-ranking ─────────────────────────────────────
-    let finalContext: RankedDoc[];
-    if (top30.length === 0) {
-      finalContext = [];
-    } else {
-      finalContext = await rerankWithCrossEncoder(message, top30, TOP_K_RERANK);
+      const fusedResults = reciprocalRankFusion([...allVectorLists, ...allBm25Lists]);
+      const top30 = fusedResults.slice(0, 30);
+      finalContext = top30.length > 0 ? await rerankWithCrossEncoder(message, top30, TOP_K_RERANK) : [];
+    } catch (ragErr) {
+      console.error("RAG pipeline error (continuing without context):", ragErr);
     }
 
     // ── STEP 7: Build context string ──────────────────────────────────────────
@@ -372,6 +374,15 @@ Responda sempre em português brasileiro. Seja preciso, técnico e objetivo.`;
       }),
     });
 
+    if (!openaiRes.ok) {
+      const errText = await openaiRes.text();
+      console.error("OpenAI API error:", openaiRes.status, errText);
+      return new Response(
+        JSON.stringify({ error: `OpenAI error ${openaiRes.status}: ${errText.slice(0, 200)}` }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // ── STEP 9: Stream response & persist message ─────────────────────────────
     let fullResponse = "";
 
@@ -379,12 +390,14 @@ Responda sempre em português brasileiro. Seja preciso, técnico e objetivo.`;
     const writer = writable.getWriter();
     const encoder = new TextEncoder();
 
-    // Save user message first
-    await supabase.from("messages").insert({
+    // Persist user message (non-blocking — don't let DB errors stop the stream)
+    supabase.from("messages").insert({
       conversation_id,
       role: "user",
       content: message,
-      metadata: { user_id: user.id },
+      metadata: { user_id: userId },
+    }).then(({ error }) => {
+      if (error) console.error("User message persist error:", error.message);
     });
 
     // Stream OpenAI response
@@ -420,27 +433,36 @@ Responda sempre em português brasileiro. Seja preciso, técnico e objetivo.`;
             }
           }
         }
+      } catch (streamErr) {
+        console.error("Streaming error:", streamErr);
       } finally {
-        // Save assistant message
-        await supabase.from("messages").insert({
-          conversation_id,
-          role: "assistant",
-          content: fullResponse,
-          metadata: {
-            model: CHAT_MODEL,
-            sources: finalContext.map((c) => c.metadata?.documento).filter(Boolean),
-            chunks_used: finalContext.length,
-          },
-        });
+        // Persist assistant message — must not throw, or writer.close() is skipped
+        try {
+          await supabase.from("messages").insert({
+            conversation_id,
+            role: "assistant",
+            content: fullResponse || "(sem resposta)",
+            metadata: {
+              model: CHAT_MODEL,
+              sources: finalContext.map((c) => c.metadata?.documento).filter(Boolean),
+              chunks_used: finalContext.length,
+            },
+          });
+          await supabase
+            .from("conversations")
+            .update({ updated_at: new Date().toISOString() })
+            .eq("id", conversation_id);
+        } catch (dbErr) {
+          console.error("Assistant message persist error:", dbErr);
+        }
 
-        // Update conversation timestamp
-        await supabase
-          .from("conversations")
-          .update({ updated_at: new Date().toISOString() })
-          .eq("id", conversation_id);
-
-        await writer.write(encoder.encode("data: [DONE]\n\n"));
-        await writer.close();
+        // Always close the stream
+        try {
+          await writer.write(encoder.encode("data: [DONE]\n\n"));
+          await writer.close();
+        } catch {
+          // stream already closed
+        }
       }
     })();
 

@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   Card,
-  CardContent,
   Button,
   Table,
   TableBody,
@@ -28,7 +27,7 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import { People, Add, Delete, Edit } from '@mui/icons-material';
+import { People, Add, Edit } from '@mui/icons-material';
 import { supabase } from '@/lib/supabase';
 import type { Profile, UserRole } from '@/types';
 import { useAuth } from '@/hooks/useAuth';
