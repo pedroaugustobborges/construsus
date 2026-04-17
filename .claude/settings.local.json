@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp -r /c/Users/16144-pedro/Documents/python_projects/construSUS/temp_vite/. /c/Users/16144-pedro/Documents/python_projects/construSUS/)",
+      "Bash(rm -rf /c/Users/16144-pedro/Documents/python_projects/construSUS/temp_vite)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite:*)"
+    ]
+  }
+}
