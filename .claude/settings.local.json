@@ -11,7 +11,9 @@
       "Bash(npx supabase:*)",
       "Bash(npx tsx:*)",
       "Bash(npm run:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /F /IM deno.exe /T)"
     ]
   }
 }
