@@ -1,1335 +1,2132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ConstruSUS IA – Apresentação de Mestrado</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --sus-blue: #005EA2;
-    --sus-teal: #007B6E;
-    --sus-light: #E8F4FD;
-    --sus-accent: #00A3A3;
-    --sus-gold: #D4A843;
-    --dark: #0A1628;
-    --mid: #1A2A45;
-    --surface: #F7FAFE;
-    --text: #0A1628;
-    --muted: #5A7090;
-    --white: #FFFFFF;
-    --border: rgba(0,94,162,0.12);
-  }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ConstruSUS IA – Apresentação de Mestrado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --sus-blue: #005ea2;
+        --sus-teal: #007b6e;
+        --sus-light: #e8f4fd;
+        --sus-accent: #00a3a3;
+        --sus-gold: #d4a843;
+        --dark: #0a1628;
+        --mid: #1a2a45;
+        --surface: #f7fafe;
+        --text: #0a1628;
+        --muted: #5a7090;
+        --white: #ffffff;
+        --border: rgba(0, 94, 162, 0.12);
+      }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: #0D0D0D;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-  }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: #0d0d0d;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+      }
 
-  .presentation {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
+      .presentation {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
 
-  /* ── SLIDES ── */
-  .slide {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.6s cubic-bezier(.4,0,.2,1), transform 0.6s cubic-bezier(.4,0,.2,1);
-    transform: translateX(60px);
-  }
-  .slide.active {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateX(0);
-  }
-  .slide.exiting {
-    opacity: 0;
-    transform: translateX(-60px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
+      /* ── SLIDES ── */
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(60px);
+      }
+      .slide.active {
+        opacity: 1;
+        pointer-events: all;
+        transform: translateX(0);
+      }
+      .slide.exiting {
+        opacity: 0;
+        transform: translateX(-60px);
+        transition:
+          opacity 0.4s ease,
+          transform 0.4s ease;
+      }
 
-  /* ── SLIDE CAPA ── */
-  .slide-cover {
-    background: linear-gradient(135deg, var(--dark) 0%, #0D2040 50%, #082030 100%);
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0 10vw;
-    gap: 0;
-    position: relative;
-    overflow: hidden;
-  }
-  .cover-bg {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-  }
-  .cover-bg::before {
-    content: '';
-    position: absolute;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(0,94,162,0.25) 0%, transparent 70%);
-    top: -150px; right: -100px;
-    border-radius: 50%;
-  }
-  .cover-bg::after {
-    content: '';
-    position: absolute;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(0,163,163,0.15) 0%, transparent 70%);
-    bottom: -100px; left: 5vw;
-    border-radius: 50%;
-  }
-  .cover-grid {
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(rgba(0,94,162,0.05) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0,94,162,0.05) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-  .cover-content {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    max-width: 720px;
-  }
-  .cover-eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    opacity: 0;
-    animation: fadeUp 0.7s 0.2s forwards;
-  }
-  .cover-eyebrow .line { width: 40px; height: 2px; background: var(--sus-accent); }
-  .cover-eyebrow span {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--sus-accent);
-  }
-  .cover-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.2rem, 4.5vw, 4rem);
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1.1;
-    opacity: 0;
-    animation: fadeUp 0.7s 0.35s forwards;
-  }
-  .cover-title .highlight {
-    color: var(--sus-accent);
-  }
-  .cover-subtitle {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.6);
-    font-weight: 300;
-    line-height: 1.6;
-    max-width: 560px;
-    opacity: 0;
-    animation: fadeUp 0.7s 0.5s forwards;
-  }
-  .cover-meta {
-    display: flex;
-    gap: 40px;
-    opacity: 0;
-    animation: fadeUp 0.7s 0.65s forwards;
-    margin-top: 8px;
-  }
-  .meta-item { display: flex; flex-direction: column; gap: 4px; }
-  .meta-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--sus-accent); font-weight: 500; }
-  .meta-value { font-size: 0.9rem; color: rgba(255,255,255,0.85); font-weight: 400; }
-  .cover-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(0,94,162,0.2);
-    border: 1px solid rgba(0,94,162,0.3);
-    border-radius: 100px;
-    padding: 10px 20px;
-    width: fit-content;
-    opacity: 0;
-    animation: fadeUp 0.7s 0.8s forwards;
-  }
-  .badge-dot { width: 8px; height: 8px; background: var(--sus-accent); border-radius: 50%; animation: pulse 2s infinite; }
-  .badge-text { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+      /* ── SLIDE CAPA ── */
+      .slide-cover {
+        background: linear-gradient(
+          135deg,
+          var(--dark) 0%,
+          #0d2040 50%,
+          #082030 100%
+        );
+        justify-content: center;
+        align-items: flex-start;
+        padding: 0 10vw;
+        gap: 0;
+        position: relative;
+        overflow: hidden;
+      }
+      .cover-bg {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .cover-bg::before {
+        content: "";
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(0, 94, 162, 0.25) 0%,
+          transparent 70%
+        );
+        top: -150px;
+        right: -100px;
+        border-radius: 50%;
+      }
+      .cover-bg::after {
+        content: "";
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(0, 163, 163, 0.15) 0%,
+          transparent 70%
+        );
+        bottom: -100px;
+        left: 5vw;
+        border-radius: 50%;
+      }
+      .cover-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 94, 162, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 94, 162, 0.05) 1px, transparent 1px);
+        background-size: 60px 60px;
+      }
+      .cover-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        max-width: 720px;
+      }
+      .cover-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        opacity: 0;
+        animation: fadeUp 0.7s 0.2s forwards;
+      }
+      .cover-eyebrow .line {
+        width: 40px;
+        height: 2px;
+        background: var(--sus-accent);
+      }
+      .cover-eyebrow span {
+        font-family: "DM Sans", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--sus-accent);
+      }
+      .cover-title {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(2.2rem, 4.5vw, 4rem);
+        font-weight: 800;
+        color: var(--white);
+        line-height: 1.1;
+        opacity: 0;
+        animation: fadeUp 0.7s 0.35s forwards;
+      }
+      .cover-title .highlight {
+        color: var(--sus-accent);
+      }
+      .cover-subtitle {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 300;
+        line-height: 1.6;
+        max-width: 560px;
+        opacity: 0;
+        animation: fadeUp 0.7s 0.5s forwards;
+      }
+      .cover-meta {
+        display: flex;
+        gap: 40px;
+        opacity: 0;
+        animation: fadeUp 0.7s 0.65s forwards;
+        margin-top: 8px;
+      }
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .meta-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--sus-accent);
+        font-weight: 500;
+      }
+      .meta-value {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 400;
+      }
+      .cover-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(0, 94, 162, 0.2);
+        border: 1px solid rgba(0, 94, 162, 0.3);
+        border-radius: 100px;
+        padding: 10px 20px;
+        width: fit-content;
+        opacity: 0;
+        animation: fadeUp 0.7s 0.8s forwards;
+      }
+      .badge-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--sus-accent);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      .badge-text {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
 
-  /* ── LAYOUT PADRÃO ── */
-  .slide-standard {
-    background: var(--white);
-    overflow: hidden;
-  }
-  .slide-standard.dark-variant {
-    background: var(--dark);
-  }
+      /* ── LAYOUT PADRÃO ── */
+      .slide-standard {
+        background: var(--white);
+        overflow: hidden;
+      }
+      .slide-standard.dark-variant {
+        background: var(--dark);
+      }
 
-  .slide-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 28px 60px 0;
-    flex-shrink: 0;
-  }
-  .slide-header .logo-mark {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .logo-mark .dot { width: 10px; height: 10px; background: var(--sus-blue); border-radius: 50%; }
-  .logo-mark .wordmark { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--sus-blue); letter-spacing: 1px; }
+      .slide-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 28px 60px 0;
+        flex-shrink: 0;
+      }
+      .slide-header .logo-mark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo-mark .dot {
+        width: 10px;
+        height: 10px;
+        background: var(--sus-blue);
+        border-radius: 50%;
+      }
+      .logo-mark .wordmark {
+        font-family: "Syne", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--sus-blue);
+        letter-spacing: 1px;
+      }
 
-  .slide-number { font-size: 11px; color: var(--muted); letter-spacing: 2px; font-weight: 300; }
+      .slide-number {
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 2px;
+        font-weight: 300;
+      }
 
-  .slide-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 24px 60px 40px;
-    overflow: hidden;
-  }
+      .slide-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 24px 60px 40px;
+        overflow: hidden;
+      }
 
-  .section-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .section-tag .tag-line { width: 24px; height: 2px; background: var(--sus-blue); }
-  .section-tag span { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--sus-blue); font-weight: 500; }
+      .section-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .section-tag .tag-line {
+        width: 24px;
+        height: 2px;
+        background: var(--sus-blue);
+      }
+      .section-tag span {
+        font-size: 11px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--sus-blue);
+        font-weight: 500;
+      }
 
-  .slide-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
-    font-weight: 700;
-    color: var(--dark);
-    line-height: 1.15;
-    margin-bottom: 28px;
-  }
-  .slide-title .accent { color: var(--sus-blue); }
+      .slide-title {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+        font-weight: 700;
+        color: var(--dark);
+        line-height: 1.15;
+        margin-bottom: 28px;
+      }
+      .slide-title .accent {
+        color: var(--sus-blue);
+      }
 
-  .dark-variant .slide-title { color: var(--white); }
-  .dark-variant .section-tag span { color: var(--sus-accent); }
-  .dark-variant .section-tag .tag-line { background: var(--sus-accent); }
-  .dark-variant .logo-mark .dot { background: var(--sus-accent); }
-  .dark-variant .logo-mark .wordmark { color: var(--white); }
-  .dark-variant .slide-number { color: rgba(255,255,255,0.3); }
+      .dark-variant .slide-title {
+        color: var(--white);
+      }
+      .dark-variant .section-tag span {
+        color: var(--sus-accent);
+      }
+      .dark-variant .section-tag .tag-line {
+        background: var(--sus-accent);
+      }
+      .dark-variant .logo-mark .dot {
+        background: var(--sus-accent);
+      }
+      .dark-variant .logo-mark .wordmark {
+        color: var(--white);
+      }
+      .dark-variant .slide-number {
+        color: rgba(255, 255, 255, 0.3);
+      }
 
-  /* ── CONTENT BLOCKS ── */
-  .content-grid {
-    display: grid;
-    gap: 16px;
-    flex: 1;
-  }
-  .content-grid.cols-2 { grid-template-columns: 1fr 1fr; }
-  .content-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+      /* ── CONTENT BLOCKS ── */
+      .content-grid {
+        display: grid;
+        gap: 16px;
+        flex: 1;
+      }
+      .content-grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .content-grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
 
-  .card {
-    background: var(--sus-light);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px 28px;
-    position: relative;
-    overflow: hidden;
-  }
-  .card.blue-card { background: var(--sus-blue); border-color: transparent; }
-  .card.teal-card { background: var(--sus-teal); border-color: transparent; }
-  .card.dark-card { background: var(--mid); border-color: rgba(255,255,255,0.08); }
-  .card.accent-card { background: rgba(0,163,163,0.08); border-color: rgba(0,163,163,0.2); }
+      .card {
+        background: var(--sus-light);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px 28px;
+        position: relative;
+        overflow: hidden;
+      }
+      .card.blue-card {
+        background: var(--sus-blue);
+        border-color: transparent;
+      }
+      .card.teal-card {
+        background: var(--sus-teal);
+        border-color: transparent;
+      }
+      .card.dark-card {
+        background: var(--mid);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+      .card.accent-card {
+        background: rgba(0, 163, 163, 0.08);
+        border-color: rgba(0, 163, 163, 0.2);
+      }
 
-  .card-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--sus-blue);
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-  .card.blue-card .card-label,
-  .card.teal-card .card-label,
-  .card.dark-card .card-label { color: rgba(255,255,255,0.5); }
+      .card-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--sus-blue);
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .card.blue-card .card-label,
+      .card.teal-card .card-label,
+      .card.dark-card .card-label {
+        color: rgba(255, 255, 255, 0.5);
+      }
 
-  .card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 8px;
-    line-height: 1.3;
-  }
-  .card.blue-card .card-title,
-  .card.teal-card .card-title,
-  .card.dark-card .card-title { color: var(--white); }
+      .card-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 8px;
+        line-height: 1.3;
+      }
+      .card.blue-card .card-title,
+      .card.teal-card .card-title,
+      .card.dark-card .card-title {
+        color: var(--white);
+      }
 
-  .card-text {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.65;
-  }
-  .card.blue-card .card-text,
-  .card.teal-card .card-text,
-  .card.dark-card .card-text { color: rgba(255,255,255,0.7); }
+      .card-text {
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+      .card.blue-card .card-text,
+      .card.teal-card .card-text,
+      .card.dark-card .card-text {
+        color: rgba(255, 255, 255, 0.7);
+      }
 
-  .card-number {
-    font-family: 'Syne', sans-serif;
-    font-size: 2.8rem;
-    font-weight: 800;
-    color: var(--sus-blue);
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-  .card.dark-card .card-number { color: var(--sus-accent); }
+      .card-number {
+        font-family: "Syne", sans-serif;
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: var(--sus-blue);
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+      .card.dark-card .card-number {
+        color: var(--sus-accent);
+      }
 
-  /* ── PROBLEM SLIDE ── */
-  .problem-visual {
-    display: flex;
-    gap: 20px;
-    align-items: stretch;
-    flex: 1;
-  }
-  .problem-left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .problem-right {
-    width: 340px;
-    background: var(--sus-blue);
-    border-radius: 20px;
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .problem-right::before {
-    content: '';
-    position: absolute;
-    width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent);
-    top: -50px; right: -50px;
-    border-radius: 50%;
-  }
-  .problem-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .problem-stat .num {
-    font-family: 'Syne', sans-serif;
-    font-size: 2.6rem;
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1;
-  }
-  .problem-stat .desc {
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.65);
-    line-height: 1.4;
-  }
-  .problem-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.1); }
+      /* ── PROBLEM SLIDE ── */
+      .problem-visual {
+        display: flex;
+        gap: 20px;
+        align-items: stretch;
+        flex: 1;
+      }
+      .problem-left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .problem-right {
+        width: 340px;
+        background: var(--sus-blue);
+        border-radius: 20px;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      .problem-right::before {
+        content: "";
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.08),
+          transparent
+        );
+        top: -50px;
+        right: -50px;
+        border-radius: 50%;
+      }
+      .problem-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .problem-stat .num {
+        font-family: "Syne", sans-serif;
+        font-size: 2.6rem;
+        font-weight: 800;
+        color: var(--white);
+        line-height: 1;
+      }
+      .problem-stat .desc {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.4;
+      }
+      .problem-divider {
+        width: 100%;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
 
-  .issue-item {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    background: #F0F5FC;
-    border-radius: 12px;
-    padding: 16px 18px;
-    border-left: 3px solid var(--sus-blue);
-  }
-  .issue-icon {
-    width: 32px; height: 32px;
-    background: var(--sus-blue);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-size: 14px;
-  }
-  .issue-text { font-size: 0.82rem; color: var(--dark); line-height: 1.55; }
-  .issue-text strong { display: block; font-weight: 600; margin-bottom: 3px; font-size: 0.85rem; }
+      .issue-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        background: #f0f5fc;
+        border-radius: 12px;
+        padding: 16px 18px;
+        border-left: 3px solid var(--sus-blue);
+      }
+      .issue-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--sus-blue);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 14px;
+      }
+      .issue-text {
+        font-size: 0.82rem;
+        color: var(--dark);
+        line-height: 1.55;
+      }
+      .issue-text strong {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 3px;
+        font-size: 0.85rem;
+      }
 
-  /* ── OBJECTIVES ── */
-  .obj-main {
-    background: linear-gradient(135deg, var(--sus-blue), var(--sus-teal));
-    border-radius: 20px;
-    padding: 28px 32px;
-    margin-bottom: 16px;
-    color: white;
-  }
-  .obj-main-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 10px; }
-  .obj-main-text { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 600; line-height: 1.5; }
+      /* ── OBJECTIVES ── */
+      .obj-main {
+        background: linear-gradient(135deg, var(--sus-blue), var(--sus-teal));
+        border-radius: 20px;
+        padding: 28px 32px;
+        margin-bottom: 16px;
+        color: white;
+      }
+      .obj-main-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 10px;
+      }
+      .obj-main-text {
+        font-family: "Syne", sans-serif;
+        font-size: 1.05rem;
+        font-weight: 600;
+        line-height: 1.5;
+      }
 
-  .obj-list { display: flex; flex-direction: column; gap: 10px; flex: 1; }
-  .obj-item {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    background: var(--surface);
-    border-radius: 10px;
-    padding: 12px 18px;
-    border: 1px solid var(--border);
-  }
-  .obj-num {
-    width: 26px; height: 26px;
-    background: var(--sus-blue);
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-size: 12px; font-weight: 700; color: white;
-    flex-shrink: 0;
-  }
-  .obj-item-text { font-size: 0.81rem; color: var(--dark); line-height: 1.45; }
+      .obj-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+      }
+      .obj-item {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        background: var(--surface);
+        border-radius: 10px;
+        padding: 12px 18px;
+        border: 1px solid var(--border);
+      }
+      .obj-num {
+        width: 26px;
+        height: 26px;
+        background: var(--sus-blue);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Syne", sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        color: white;
+        flex-shrink: 0;
+      }
+      .obj-item-text {
+        font-size: 0.81rem;
+        color: var(--dark);
+        line-height: 1.45;
+      }
 
-  /* ── HYPOTHESIS ── */
-  .hyp-container {
-    display: flex;
-    gap: 20px;
-    flex: 1;
-    align-items: stretch;
-  }
-  .hyp-main {
-    flex: 1;
-    background: var(--dark);
-    border-radius: 20px;
-    padding: 36px 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hyp-main::before {
-    content: '"';
-    position: absolute;
-    font-family: 'Syne', sans-serif;
-    font-size: 18rem;
-    font-weight: 800;
-    color: rgba(0,163,163,0.06);
-    top: -60px;
-    left: 10px;
-    line-height: 1;
-  }
-  .hyp-text {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--white);
-    line-height: 1.55;
-    position: relative;
-    z-index: 1;
-  }
-  .hyp-text .hl { color: var(--sus-accent); }
-  .hyp-source {
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.4);
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding-top: 16px;
-    position: relative;
-    z-index: 1;
-  }
-  .hyp-side {
-    width: 240px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .hyp-pillar {
-    flex: 1;
-    border-radius: 16px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .hyp-pillar.p1 { background: rgba(0,94,162,0.08); border: 1px solid rgba(0,94,162,0.2); }
-  .hyp-pillar.p2 { background: rgba(0,163,163,0.08); border: 1px solid rgba(0,163,163,0.2); }
-  .hyp-pillar.p3 { background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.2); }
-  .pillar-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
-  .p1 .pillar-label { color: var(--sus-blue); }
-  .p2 .pillar-label { color: var(--sus-accent); }
-  .p3 .pillar-label { color: var(--sus-gold); }
-  .pillar-text { font-size: 0.78rem; color: var(--dark); line-height: 1.45; margin-top: 8px; }
+      /* ── HYPOTHESIS ── */
+      .hyp-container {
+        display: flex;
+        gap: 20px;
+        flex: 1;
+        align-items: stretch;
+      }
+      .hyp-main {
+        flex: 1;
+        background: var(--dark);
+        border-radius: 20px;
+        padding: 36px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hyp-main::before {
+        content: '"';
+        position: absolute;
+        font-family: "Syne", sans-serif;
+        font-size: 18rem;
+        font-weight: 800;
+        color: rgba(0, 163, 163, 0.06);
+        top: -60px;
+        left: 10px;
+        line-height: 1;
+      }
+      .hyp-text {
+        font-family: "Syne", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--white);
+        line-height: 1.55;
+        position: relative;
+        z-index: 1;
+      }
+      .hyp-text .hl {
+        color: var(--sus-accent);
+      }
+      .hyp-source {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.4);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 16px;
+        position: relative;
+        z-index: 1;
+      }
+      .hyp-side {
+        width: 240px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .hyp-pillar {
+        flex: 1;
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .hyp-pillar.p1 {
+        background: rgba(0, 94, 162, 0.08);
+        border: 1px solid rgba(0, 94, 162, 0.2);
+      }
+      .hyp-pillar.p2 {
+        background: rgba(0, 163, 163, 0.08);
+        border: 1px solid rgba(0, 163, 163, 0.2);
+      }
+      .hyp-pillar.p3 {
+        background: rgba(212, 168, 67, 0.08);
+        border: 1px solid rgba(212, 168, 67, 0.2);
+      }
+      .pillar-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      .p1 .pillar-label {
+        color: var(--sus-blue);
+      }
+      .p2 .pillar-label {
+        color: var(--sus-accent);
+      }
+      .p3 .pillar-label {
+        color: var(--sus-gold);
+      }
+      .pillar-text {
+        font-size: 0.78rem;
+        color: var(--dark);
+        line-height: 1.45;
+        margin-top: 8px;
+      }
 
-  /* ── METHODOLOGY ── */
-  .method-flow {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    flex: 1;
-    position: relative;
-  }
-  .method-flow::before {
-    content: '';
-    position: absolute;
-    left: 20px;
-    top: 20px;
-    bottom: 20px;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--sus-blue), var(--sus-teal), var(--sus-accent));
-  }
-  .method-step {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    padding: 8px 0;
-    position: relative;
-  }
-  .step-dot {
-    width: 42px; height: 42px;
-    background: var(--white);
-    border: 2px solid var(--sus-blue);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    z-index: 1;
-    font-family: 'Syne', sans-serif;
-    font-size: 14px; font-weight: 700;
-    color: var(--sus-blue);
-  }
-  .step-content {
-    flex: 1;
-    background: var(--surface);
-    border-radius: 12px;
-    padding: 14px 18px;
-    border: 1px solid var(--border);
-    margin-bottom: 6px;
-  }
-  .step-title { font-weight: 600; font-size: 0.88rem; color: var(--dark); margin-bottom: 4px; }
-  .step-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+      /* ── METHODOLOGY ── */
+      .method-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        flex: 1;
+        position: relative;
+      }
+      .method-flow::before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        bottom: 20px;
+        width: 2px;
+        background: linear-gradient(
+          to bottom,
+          var(--sus-blue),
+          var(--sus-teal),
+          var(--sus-accent)
+        );
+      }
+      .method-step {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        padding: 8px 0;
+        position: relative;
+      }
+      .step-dot {
+        width: 42px;
+        height: 42px;
+        background: var(--white);
+        border: 2px solid var(--sus-blue);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        z-index: 1;
+        font-family: "Syne", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--sus-blue);
+      }
+      .step-content {
+        flex: 1;
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 14px 18px;
+        border: 1px solid var(--border);
+        margin-bottom: 6px;
+      }
+      .step-title {
+        font-weight: 600;
+        font-size: 0.88rem;
+        color: var(--dark);
+        margin-bottom: 4px;
+      }
+      .step-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
 
-  .method-right {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-left: 20px;
-  }
-  .eval-box {
-    background: var(--dark);
-    border-radius: 16px;
-    padding: 22px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .eval-title { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--white); }
-  .eval-metric {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  .metric-icon {
-    width: 28px; height: 28px;
-    border-radius: 7px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-    flex-shrink: 0;
-  }
-  .mi-blue { background: rgba(0,94,162,0.3); }
-  .mi-teal { background: rgba(0,163,163,0.3); }
-  .eval-metric-text { font-size: 0.77rem; color: rgba(255,255,255,0.7); line-height: 1.4; }
-  .eval-metric-text strong { display: block; color: white; font-size: 0.82rem; margin-bottom: 2px; }
+      .method-right {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-left: 20px;
+      }
+      .eval-box {
+        background: var(--dark);
+        border-radius: 16px;
+        padding: 22px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .eval-title {
+        font-family: "Syne", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--white);
+      }
+      .eval-metric {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .metric-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        flex-shrink: 0;
+      }
+      .mi-blue {
+        background: rgba(0, 94, 162, 0.3);
+      }
+      .mi-teal {
+        background: rgba(0, 163, 163, 0.3);
+      }
+      .eval-metric-text {
+        font-size: 0.77rem;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.4;
+      }
+      .eval-metric-text strong {
+        display: block;
+        color: white;
+        font-size: 0.82rem;
+        margin-bottom: 2px;
+      }
 
-  /* ── TIMELINE ── */
-  .timeline-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .timeline-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .tl-label {
-    width: 160px;
-    font-size: 0.78rem;
-    color: var(--dark);
-    font-weight: 500;
-    text-align: right;
-    line-height: 1.3;
-    flex-shrink: 0;
-  }
-  .tl-bar-wrap { flex: 1; height: 36px; background: #EFF4FB; border-radius: 8px; overflow: hidden; position: relative; }
-  .tl-bar {
-    height: 100%;
-    border-radius: 8px;
-    position: absolute;
-    display: flex;
-    align-items: center;
-    padding-left: 12px;
-    font-size: 0.73rem;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  .tl-bar.blue { background: var(--sus-blue); color: white; }
-  .tl-bar.teal { background: var(--sus-teal); color: white; }
-  .tl-bar.accent { background: var(--sus-accent); color: white; }
-  .tl-bar.gold { background: var(--sus-gold); color: white; }
-  .tl-months {
-    display: flex;
-    gap: 0;
-    padding-left: 174px;
-    margin-bottom: 4px;
-  }
-  .tl-month-label {
-    flex: 1;
-    font-size: 10px;
-    color: var(--muted);
-    text-align: center;
-    letter-spacing: 0.5px;
-    border-left: 1px dashed rgba(0,0,0,0.08);
-    padding-top: 2px;
-  }
+      /* ── TIMELINE ── */
+      .timeline-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .timeline-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .tl-label {
+        width: 160px;
+        font-size: 0.78rem;
+        color: var(--dark);
+        font-weight: 500;
+        text-align: right;
+        line-height: 1.3;
+        flex-shrink: 0;
+      }
+      .tl-bar-wrap {
+        flex: 1;
+        height: 36px;
+        background: #eff4fb;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+      }
+      .tl-bar {
+        height: 100%;
+        border-radius: 8px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        padding-left: 12px;
+        font-size: 0.73rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .tl-bar.blue {
+        background: var(--sus-blue);
+        color: white;
+      }
+      .tl-bar.teal {
+        background: var(--sus-teal);
+        color: white;
+      }
+      .tl-bar.accent {
+        background: var(--sus-accent);
+        color: white;
+      }
+      .tl-bar.gold {
+        background: var(--sus-gold);
+        color: white;
+      }
+      .tl-months {
+        display: flex;
+        gap: 0;
+        padding-left: 174px;
+        margin-bottom: 4px;
+      }
+      .tl-month-label {
+        flex: 1;
+        font-size: 10px;
+        color: var(--muted);
+        text-align: center;
+        letter-spacing: 0.5px;
+        border-left: 1px dashed rgba(0, 0, 0, 0.08);
+        padding-top: 2px;
+      }
 
-  /* ── BUDGET ── */
-  .budget-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    flex: 1;
-  }
-  .budget-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .budget-item.highlight-item {
-    background: var(--sus-blue);
-    border-color: transparent;
-    grid-column: span 2;
-  }
-  .budget-cat { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--sus-blue); font-weight: 600; }
-  .highlight-item .budget-cat { color: rgba(255,255,255,0.6); }
-  .budget-value { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--dark); }
-  .highlight-item .budget-value { color: white; font-size: 2.2rem; }
-  .budget-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
-  .highlight-item .budget-desc { color: rgba(255,255,255,0.7); }
-  .budget-note {
-    background: rgba(212,168,67,0.1);
-    border: 1px solid rgba(212,168,67,0.2);
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-size: 0.76rem;
-    color: #8B6914;
-    line-height: 1.5;
-    margin-top: 4px;
-  }
+      /* ── BUDGET ── */
+      .budget-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        flex: 1;
+      }
+      .budget-item {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .budget-item.highlight-item {
+        background: var(--sus-blue);
+        border-color: transparent;
+        grid-column: span 2;
+      }
+      .budget-cat {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--sus-blue);
+        font-weight: 600;
+      }
+      .highlight-item .budget-cat {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .budget-value {
+        font-family: "Syne", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--dark);
+      }
+      .highlight-item .budget-value {
+        color: white;
+        font-size: 2.2rem;
+      }
+      .budget-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .highlight-item .budget-desc {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .budget-note {
+        background: rgba(212, 168, 67, 0.1);
+        border: 1px solid rgba(212, 168, 67, 0.2);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 0.76rem;
+        color: #8b6914;
+        line-height: 1.5;
+        margin-top: 4px;
+      }
 
-  /* ── REFERENCES ── */
-  .refs-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    flex: 1;
-    overflow: auto;
-  }
-  .ref-item {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    padding: 12px 18px;
-    background: var(--surface);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-  }
-  .ref-num {
-    width: 24px; height: 24px;
-    background: var(--sus-blue);
-    border-radius: 5px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: white;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .ref-text { font-size: 0.76rem; color: var(--dark); line-height: 1.55; }
-  .ref-text em { color: var(--sus-blue); font-style: normal; font-weight: 500; }
+      /* ── REFERENCES ── */
+      .refs-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+        overflow: auto;
+      }
+      .ref-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 12px 18px;
+        background: var(--surface);
+        border-radius: 10px;
+        border: 1px solid var(--border);
+      }
+      .ref-num {
+        width: 24px;
+        height: 24px;
+        background: var(--sus-blue);
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: white;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .ref-text {
+        font-size: 0.76rem;
+        color: var(--dark);
+        line-height: 1.55;
+      }
+      .ref-text em {
+        color: var(--sus-blue);
+        font-style: normal;
+        font-weight: 500;
+      }
 
-  /* ── CLOSING ── */
-  .slide-closing {
-    background: linear-gradient(135deg, var(--dark) 0%, #0D2040 60%, #082030 100%);
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .closing-bg::before {
-    content: '';
-    position: absolute;
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(0,94,162,0.2) 0%, transparent 65%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-  }
-  .closing-content {
-    position: relative; z-index: 2;
-    display: flex; flex-direction: column; align-items: center; gap: 24px;
-  }
-  .closing-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1.1;
-  }
-  .closing-title .hl { color: var(--sus-accent); }
-  .closing-sub { font-size: 1rem; color: rgba(255,255,255,0.5); max-width: 500px; line-height: 1.6; }
-  .closing-contact {
-    display: flex; gap: 32px; margin-top: 8px;
-  }
-  .contact-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .contact-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--sus-accent); }
-  .contact-value { font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+      /* ── CLOSING ── */
+      .slide-closing {
+        background: linear-gradient(
+          135deg,
+          var(--dark) 0%,
+          #0d2040 60%,
+          #082030 100%
+        );
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .closing-bg::before {
+        content: "";
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(
+          circle,
+          rgba(0, 94, 162, 0.2) 0%,
+          transparent 65%
+        );
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+      }
+      .closing-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+      .closing-title {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-weight: 800;
+        color: var(--white);
+        line-height: 1.1;
+      }
+      .closing-title .hl {
+        color: var(--sus-accent);
+      }
+      .closing-sub {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.5);
+        max-width: 500px;
+        line-height: 1.6;
+      }
+      .closing-contact {
+        display: flex;
+        gap: 32px;
+        margin-top: 8px;
+      }
+      .contact-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+      .contact-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--sus-accent);
+      }
+      .contact-value {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.75);
+      }
 
-  /* ── NAVIGATION ── */
-  .nav {
-    position: fixed;
-    bottom: 36px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(10,22,40,0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 100px;
-    padding: 10px 20px;
-    z-index: 100;
-  }
-  .nav-btn {
-    width: 36px; height: 36px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 50%;
-    color: rgba(255,255,255,0.7);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    transition: all 0.2s;
-  }
-  .nav-btn:hover { background: var(--sus-blue); border-color: var(--sus-blue); color: white; }
-  .nav-dots { display: flex; gap: 6px; align-items: center; }
-  .nav-dot {
-    width: 6px; height: 6px;
-    background: rgba(255,255,255,0.25);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .nav-dot.active { background: var(--sus-accent); width: 20px; border-radius: 3px; }
-  .nav-progress {
-    font-size: 11px;
-    color: rgba(255,255,255,0.4);
-    min-width: 36px;
-    text-align: center;
-  }
+      /* ── NAVIGATION ── */
+      .nav {
+        position: fixed;
+        bottom: 36px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(10, 22, 40, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 100px;
+        padding: 10px 20px;
+        z-index: 100;
+      }
+      .nav-btn {
+        width: 36px;
+        height: 36px;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.2s;
+      }
+      .nav-btn:hover {
+        background: var(--sus-blue);
+        border-color: var(--sus-blue);
+        color: white;
+      }
+      .nav-dots {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .nav-dot {
+        width: 6px;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .nav-dot.active {
+        background: var(--sus-accent);
+        width: 20px;
+        border-radius: 3px;
+      }
+      .nav-progress {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+        min-width: 36px;
+        text-align: center;
+      }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(0.85); }
-  }
+      /* ── ANIMATIONS ── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.6;
+          transform: scale(0.85);
+        }
+      }
 
-  .method-layout {
-    display: flex;
-    gap: 20px;
-    flex: 1;
-  }
+      .method-layout {
+        display: flex;
+        gap: 20px;
+        flex: 1;
+      }
 
-  /* Intro flow  */
-  .intro-layout {
-    display: flex;
-    gap: 20px;
-    flex: 1;
-    align-items: stretch;
-  }
-  .intro-text-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .intro-side {
-    width: 280px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .intro-big {
-    background: linear-gradient(135deg, var(--sus-blue) 0%, var(--sus-teal) 100%);
-    border-radius: 20px;
-    padding: 28px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 8px;
-    position: relative;
-    overflow: hidden;
-  }
-  .intro-big::before {
-    content: '+';
-    position: absolute;
-    font-family: 'Syne', sans-serif;
-    font-size: 14rem;
-    font-weight: 800;
-    color: rgba(255,255,255,0.04);
-    top: -40px; right: -10px;
-    line-height: 1;
-  }
-  .intro-big-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); }
-  .intro-big-text { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 600; color: white; line-height: 1.4; }
-  .intro-small {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px 20px;
-  }
-  .intro-small-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--sus-blue); font-weight: 600; margin-bottom: 6px; }
-  .intro-small-text { font-size: 0.78rem; color: var(--dark); line-height: 1.5; }
+      /* Intro flow  */
+      .intro-layout {
+        display: flex;
+        gap: 20px;
+        flex: 1;
+        align-items: stretch;
+      }
+      .intro-text-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .intro-side {
+        width: 280px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .intro-big {
+        background: linear-gradient(
+          135deg,
+          var(--sus-blue) 0%,
+          var(--sus-teal) 100%
+        );
+        border-radius: 20px;
+        padding: 28px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+      .intro-big::before {
+        content: "+";
+        position: absolute;
+        font-family: "Syne", sans-serif;
+        font-size: 14rem;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.04);
+        top: -40px;
+        right: -10px;
+        line-height: 1;
+      }
+      .intro-big-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .intro-big-text {
+        font-family: "Syne", sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        line-height: 1.4;
+      }
+      .intro-small {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px 20px;
+      }
+      .intro-small-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--sus-blue);
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .intro-small-text {
+        font-size: 0.78rem;
+        color: var(--dark);
+        line-height: 1.5;
+      }
 
-  .body-text {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-  .body-text strong { color: var(--dark); }
+      .body-text {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .body-text strong {
+        color: var(--dark);
+      }
 
-  .divider { height: 1px; background: var(--border); margin: 4px 0; }
-
-</style>
-</head>
-<body>
-<div class="presentation" id="pres">
-
-  <!-- ══ SLIDE 0: CAPA ══ -->
-  <div class="slide slide-cover active" data-index="0">
-    <div class="cover-bg"></div>
-    <div class="cover-grid"></div>
-    <div class="cover-content">
-      <div class="cover-eyebrow">
-        <span class="line"></span>
-        <span>Mestrado Profissional em Saúde Coletiva</span>
-      </div>
-      <h1 class="cover-title">
-        ConstruSUS <span class="highlight">IA</span><br>
-        Assistente Virtual Inteligente para<br>
-        Infraestrutura em Saúde
-      </h1>
-      <p class="cover-subtitle">
-        Desenvolvimento e validação de um sistema baseado em Processamento de Linguagem Natural para apoiar gestores do SUS na estimativa de custos e planejamento físico de unidades hospitalares.
-      </p>
-      <div class="cover-meta">
-        <div class="meta-item">
-          <span class="meta-label">Autor</span>
-          <span class="meta-value">Pedro Augusto Barbosa Borges</span>
-        </div>
-        <div class="meta-item">
-          <span class="meta-label">Linha de Pesquisa</span>
-          <span class="meta-value">Gestão de Sistemas e Processos Gerenciais</span>
-        </div>
-        <div class="meta-item">
-          <span class="meta-label">Ano</span>
-          <span class="meta-value">Goiânia – GO, 2025</span>
-        </div>
-      </div>
-      <div class="cover-badge">
-        <span class="badge-dot"></span>
-        <span class="badge-text">Projeto de Pesquisa – Apresentação Oral · 2025</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ SLIDE 1: INTRODUÇÃO / JUSTIFICATIVA ══ -->
-  <div class="slide slide-standard" data-index="1">
-    <div class="slide-header">
-      <div class="logo-mark"><div class="dot"></div><span class="wordmark">ConstruSUS IA</span></div>
-      <span class="slide-number">01 / 09</span>
-    </div>
-    <div class="slide-body">
-      <div class="section-tag"><div class="tag-line"></div><span>Introdução &amp; Justificativa</span></div>
-      <h2 class="slide-title">O SUS investe — mas <span class="accent">planejar custa caro</span></h2>
-      <div class="intro-layout">
-        <div class="intro-text-col">
-          <p class="body-text">
-            O fortalecimento do SUS demanda planejamento eficiente da infraestrutura física hospitalar. Obras de construção, reformas, ampliações e recuperações envolvem <strong>recursos públicos expressivos</strong> e exigem estimativas precisas de custo. Contudo, profissionais e gestores encontram sérias dificuldades para consultar e integrar as bases oficiais disponíveis — SINAPI, SIGEM, manuais técnicos do Ministério da Saúde e normativas da ANVISA.
+      .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 4px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="presentation" id="pres">
+      <!-- ══ SLIDE 0: CAPA ══ -->
+      <div class="slide slide-cover active" data-index="0">
+        <div class="cover-bg"></div>
+        <div class="cover-grid"></div>
+        <div class="cover-content">
+          <div class="cover-eyebrow">
+            <span class="line"></span>
+            <span>Mestrado Profissional em Saúde Coletiva</span>
+          </div>
+          <h1 class="cover-title">
+            ConstruSUS <span class="highlight">IA</span><br />
+            Assistente Virtual Inteligente para<br />
+            Infraestrutura em Saúde
+          </h1>
+          <p class="cover-subtitle">
+            Desenvolvimento e validação de um sistema baseado em Processamento
+            de Linguagem Natural para apoiar gestores do SUS na estimativa de
+            custos e planejamento físico de unidades hospitalares.
           </p>
-          <div class="divider"></div>
-          <p class="body-text">
-            Na prática, a elaboração de uma estimativa de custos envolve <strong>consulta manual a múltiplas planilhas</strong>, referências desatualizadas, ausência de padronização metodológica e perda crônica de dados históricos. O resultado é retrabalho, subfinanciamento de projetos e comprometimento da qualidade das obras.
-          </p>
-          <div class="issue-item">
-            <div class="issue-icon">📋</div>
-            <div class="issue-text"><strong>Fragmentação de Fontes</strong>SINAPI, SIGEM, RDC 50, SOMASUS e dados regionais são consultados em silos, sem integração.</div>
+          <div class="cover-meta">
+            <div class="meta-item">
+              <span class="meta-label">Autor</span>
+              <span class="meta-value">Pedro Augusto Barbosa Borges</span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">Orientador</span>
+              <span class="meta-value">Prof. Dr. Fernando Cupertino</span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">Co-orientador</span>
+              <span class="meta-value">Prof Dr. Ronaldo Costa</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Linha de Pesquisa</span>
+              <span class="meta-value"
+                >Gestão de Sistemas e Processos Gerenciais</span
+              >
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Ano</span>
+              <span class="meta-value">Goiânia – GO, 2026</span>
+            </div>
           </div>
-          <div class="issue-item">
-            <div class="issue-icon">📉</div>
-            <div class="issue-text"><strong>Perda de Memória Institucional</strong>Estimativas históricas raramente são registradas; a comparabilidade entre obras é limitada.</div>
-          </div>
-        </div>
-        <div class="intro-side">
-          <div class="intro-big">
-            <span class="intro-big-label">Contexto</span>
-            <span class="intro-big-text">A infraestrutura física determina a qualidade do cuidado — ambientes mal dimensionados comprometem fluxos clínicos e a segurança do paciente.</span>
-          </div>
-          <div class="intro-small">
-            <div class="intro-small-label">Tecnologia disponível</div>
-            <div class="intro-small-text">PLN e IA generativa permitem, hoje, consultar bases complexas em linguagem natural — uma janela para democratizar o acesso à informação técnica no SUS.</div>
+          <div class="cover-badge">
+            <span class="badge-dot"></span>
+            <span class="badge-text"
+              >Projeto de Pesquisa – Apresentação Oral · 2026</span
+            >
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ══ SLIDE 2: PROBLEMA ══ -->
-  <div class="slide slide-standard" data-index="2">
-    <div class="slide-header">
-      <div class="logo-mark"><div class="dot"></div><span class="wordmark">ConstruSUS IA</span></div>
-      <span class="slide-number">02 / 09</span>
-    </div>
-    <div class="slide-body">
-      <div class="section-tag"><div class="tag-line"></div><span>Problema de Pesquisa</span></div>
-      <h2 class="slide-title">Despadronização, <span class="accent">fragmentação</span><br>e perda de dados históricos</h2>
-      <div class="problem-visual">
-        <div class="problem-left">
-          <div class="issue-item">
-            <div class="issue-icon">🔎</div>
-            <div class="issue-text"><strong>Estimativas sem memória</strong>Dados de obras anteriores não são sistematizados. Cada novo projeto reinicia o processo do zero, sem benchmarks confiáveis de custo por tipologia.</div>
+      <!-- ══ SLIDE 1: INTRODUÇÃO / JUSTIFICATIVA ══ -->
+      <div class="slide slide-standard" data-index="1">
+        <div class="slide-header">
+          <div class="logo-mark">
+            <div class="dot"></div>
+            <span class="wordmark">ConstruSUS IA</span>
           </div>
-          <div class="issue-item">
-            <div class="issue-icon">⚠️</div>
-            <div class="issue-text"><strong>Despadronização metodológica</strong>Ausência de critério comum entre Secretarias Municipais e Estaduais para adotar o mesmo referencial de custo e área física mínima exigida pela RDC 50.</div>
+          <span class="slide-number">01 / 09</span>
+        </div>
+        <div class="slide-body">
+          <div class="section-tag">
+            <div class="tag-line"></div>
+            <span>Introdução &amp; Justificativa</span>
           </div>
-          <div class="issue-item">
-            <div class="issue-icon">🕒</div>
-            <div class="issue-text"><strong>Custo de processo elevado</strong>A consulta manual a tabelas SINAPI, manuais do Ministério e legislações consome horas de trabalho técnico, gerando retrabalho e risco de erro.</div>
+          <h2 class="slide-title">
+            O SUS investe — mas <span class="accent">planejar custa caro</span>
+          </h2>
+          <div class="intro-layout">
+            <div class="intro-text-col">
+              <p class="body-text">
+                O fortalecimento do SUS demanda planejamento eficiente da
+                infraestrutura física hospitalar. Obras de construções novas,
+                reformas, ampliações e recuperações envolvem
+                <strong>recursos públicos</strong> e exigem estimativas precisas
+                de custo. Contudo, profissionais e gestores encontram
+                dificuldades para consultar e integrar as bases oficiais
+                disponíveis — SINAPI, SIGEM, SOMASUS, manuais técnicos do
+                Ministério da Saúde e normativas da ANVISA.
+              </p>
+              <div class="divider"></div>
+              <p class="body-text">
+                Na prática, a elaboração de uma estimativa de custos envolve
+                <strong>consulta manual a múltiplas planilhas</strong>,
+                referências desatualizadas, ausência de padronização
+                metodológica e perda crônica de dados históricos. O resultado é
+                retrabalho, mal planejamento orçamentário e comprometimento da
+                qualidade das obras.
+              </p>
+              <div class="issue-item">
+                <div class="issue-icon">📋</div>
+                <div class="issue-text">
+                  <strong>Fragmentação de Fontes</strong>SINAPI, SIGEM, RDC 50,
+                  SOMASUS e dados regionais são consultados em silos, sem
+                  integração.
+                </div>
+              </div>
+              <div class="issue-item">
+                <div class="issue-icon">📉</div>
+                <div class="issue-text">
+                  <strong>Perda de Memória Institucional</strong>Estimativas
+                  históricas raramente são registradas; a comparabilidade entre
+                  obras é limitada.
+                </div>
+              </div>
+            </div>
+            <div class="intro-side">
+              <div class="intro-big">
+                <span class="intro-big-label">Contexto</span>
+                <span class="intro-big-text"
+                  >A infraestrutura física determina a qualidade do cuidado —
+                  ambientes mal dimensionados comprometem fluxos clínicos e a
+                  segurança do paciente.</span
+                >
+              </div>
+              <div class="intro-small">
+                <div class="intro-small-label">Tecnologia disponível</div>
+                <div class="intro-small-text">
+                  PLN e IA generativa permitem, hoje, consultar bases complexas
+                  em linguagem natural — uma janela para democratizar o acesso à
+                  informação técnica no SUS.
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="issue-item">
-            <div class="issue-icon">📦</div>
-            <div class="issue-text"><strong>Atualização descontinuada</strong>Índices SINAPI são revisados mensalmente. Gestores frequentemente tomam decisões com versões defasadas das tabelas de referência.</div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 2: PROBLEMA ══ -->
+      <div class="slide slide-standard" data-index="2">
+        <div class="slide-header">
+          <div class="logo-mark">
+            <div class="dot"></div>
+            <span class="wordmark">ConstruSUS IA</span>
           </div>
-          <div style="background:var(--sus-light);border-radius:12px;padding:16px 20px;border:1px solid var(--border);margin-top:2px;">
-            <p style="font-size:0.88rem;color:var(--dark);line-height:1.6;">
-              <strong>Pergunta norteadora:</strong> Em que medida um assistente virtual baseado em PLN, integrado às bases oficiais do SUS, é capaz de produzir estimativas de custo de infraestrutura hospitalar com acurácia comparável à prática técnica convencional e satisfação dos usuários gestores?
+          <span class="slide-number">02 / 09</span>
+        </div>
+        <div class="slide-body">
+          <div class="section-tag">
+            <div class="tag-line"></div>
+            <span>Problema de Pesquisa</span>
+          </div>
+          <h2 class="slide-title">
+            Despadronização causa
+            <span class="accent">fragmentação e perda de dados históricos</span
+            ><br />
+          </h2>
+          <div class="problem-visual">
+            <div class="problem-left">
+              <div class="issue-item">
+                <div class="issue-icon">🔎</div>
+                <div class="issue-text">
+                  <strong>Estimativas sem memória</strong>Dados de obras
+                  anteriores não são sistematizados. Cada novo projeto reinicia
+                  o processo do zero, sem benchmarks confiáveis de custo por
+                  tipologia.
+                </div>
+              </div>
+              <div class="issue-item">
+                <div class="issue-icon">⚠️</div>
+                <div class="issue-text">
+                  <strong>Despadronização metodológica</strong>Ausência de
+                  critério comum entre Secretarias Municipais e Estaduais para
+                  adotar o mesmo referencial de custo e área física mínima
+                  exigida pela RDC 50.
+                </div>
+              </div>
+              <div class="issue-item">
+                <div class="issue-icon">🕒</div>
+                <div class="issue-text">
+                  <strong>Custo de processo elevado</strong>A consulta manual a
+                  tabelas SINAPI, manuais do Ministério e legislações consome
+                  horas de trabalho técnico, gerando retrabalho e risco de erro.
+                </div>
+              </div>
+              <div class="issue-item">
+                <div class="issue-icon">📦</div>
+                <div class="issue-text">
+                  <strong>Atualização descontinuada</strong>Índices SINAPI são
+                  revisados mensalmente. Gestores frequentemente tomam decisões
+                  com versões defasadas das tabelas de referência.
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--sus-light);
+                  border-radius: 12px;
+                  padding: 16px 20px;
+                  border: 1px solid var(--border);
+                  margin-top: 2px;
+                "
+              >
+                <p
+                  style="
+                    font-size: 0.88rem;
+                    color: var(--dark);
+                    line-height: 1.6;
+                  "
+                >
+                  <strong>Pergunta norteadora:</strong> Em que medida um
+                  assistente virtual baseado em PLN, integrado às bases oficiais
+                  do SUS, é capaz de produzir estimativas de custo de
+                  infraestrutura hospitalar com acurácia comparável à prática
+                  técnica convencional e satisfação dos usuários gestores?
+                </p>
+              </div>
+            </div>
+            <div class="problem-right">
+              <div class="problem-stat">
+                <span class="num">3+</span>
+                <span class="desc"
+                  >bases de dados oficiais sem integração (SINAPI, SIGEM,
+                  SOMASUS, RDC 50)</span
+                >
+              </div>
+              <div class="problem-divider"></div>
+              <div class="problem-stat">
+                <span class="num">Mensal</span>
+                <span class="desc"
+                  >frequência de atualização do SINAPI — raramente incorporada
+                  em tempo real</span
+                >
+              </div>
+              <div class="problem-divider"></div>
+              <div class="problem-stat">
+                <span class="num">100%</span>
+                <span class="desc"
+                  >manual — processo atual de consulta e estimativa de custos
+                  hospitalares</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 3: OBJETIVOS ══ -->
+      <div class="slide slide-standard" data-index="3">
+        <div class="slide-header">
+          <div class="logo-mark">
+            <div class="dot"></div>
+            <span class="wordmark">ConstruSUS IA</span>
+          </div>
+          <span class="slide-number">03 / 09</span>
+        </div>
+        <div class="slide-body">
+          <div class="section-tag">
+            <div class="tag-line"></div>
+            <span>Objetivos</span>
+          </div>
+          <h2 class="slide-title">
+            O que o projeto <span class="accent">pretende alcançar</span>
+          </h2>
+          <div class="obj-main">
+            <div class="obj-main-label">Objetivo Geral</div>
+            <div class="obj-main-text">
+              Desenvolver, implementar e avaliar um assistente virtual com
+              Processamento de Linguagem Natural para apoiar profissionais e
+              gestores do SUS na estimativa de custos, dimensionamento de área
+              física e planejamento de recursos para construção, ampliação,
+              reforma e manutenção de unidades de saúde — integrando SINAPI,
+              SIGEM e manuais técnicos do Ministério da Saúde.
+            </div>
+          </div>
+          <div class="obj-list">
+            <div class="obj-item">
+              <div class="obj-num">1</div>
+              <div class="obj-item-text">
+                Levantar e organizar as bases de dados oficiais (SINAPI, SIGEM e
+                fontes complementares) que forneçam parâmetros de custos de
+                obras, equipamentos e recursos para unidades de saúde.
+              </div>
+            </div>
+            <div class="obj-item">
+              <div class="obj-num">2</div>
+              <div class="obj-item-text">
+                Desenvolver o módulo de PLN capaz de compreender perguntas em
+                português e extrair intenções e entidades relacionadas a custos,
+                materiais e dimensionamento físico.
+              </div>
+            </div>
+            <div class="obj-item">
+              <div class="obj-num">3</div>
+              <div class="obj-item-text">
+                Treinar o motor de estimativa que agregue informações de custos
+                de construção, equipamentos e manutenção, gerando respostas
+                personalizadas por tipo e capacidade da unidade.
+              </div>
+            </div>
+            <div class="obj-item">
+              <div class="obj-num">4</div>
+              <div class="obj-item-text">
+                Validar o assistente junto a profissionais e gestores do SUS,
+                avaliando acurácia das estimativas e satisfação com a
+                ferramenta.
+              </div>
+            </div>
+            <div class="obj-item">
+              <div class="obj-num">5</div>
+              <div class="obj-item-text">
+                Propor estratégias de implementação e escalabilidade nos
+                diferentes níveis de gestão do SUS, apoiando decisões de
+                investimento em infraestrutura de saúde.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 4: HIPÓTESE ══ -->
+      <div class="slide slide-standard" data-index="4">
+        <div class="slide-header">
+          <div class="logo-mark">
+            <div class="dot"></div>
+            <span class="wordmark">ConstruSUS IA</span>
+          </div>
+          <span class="slide-number">04 / 09</span>
+        </div>
+        <div class="slide-body">
+          <div class="section-tag">
+            <div class="tag-line"></div>
+            <span>Hipótese</span>
+          </div>
+          <h2 class="slide-title">
+            A hipótese central <span class="accent">da pesquisa</span>
+          </h2>
+          <div class="hyp-container">
+            <div class="hyp-main">
+              <p class="hyp-text">
+                A <span class="hl">padronização e integração</span> das bases de
+                dados oficiais do SUS — SINAPI, SIGEM, RDC 50 e manuais técnicos
+                do Ministério da Saúde — em um repositório estruturado e
+                semânticamente indexado tornará possível, por meio de uma
+                ferramenta de
+                <span class="hl"
+                  >linguagem natural baseada em Inteligência Artificial</span
+                >, produzir estimativas de custo de infraestrutura hospitalar
+                com acurácia comparável à prática convencional, reduzindo o
+                tempo de resposta e aumentando a satisfação dos gestores
+                responsáveis pelo planejamento físico do SUS.
+              </p>
+              <p class="hyp-source">
+                Hipótese derivada da lacuna entre a disponibilidade de dados
+                oficiais e a ausência de ferramentas integradas de consulta —
+                identificada na prática profissional do pesquisador na gestão de
+                obras hospitalares (SES-GO) e na literatura de saúde digital.
+              </p>
+            </div>
+            <div class="hyp-side">
+              <div class="hyp-pillar p1">
+                <span class="pillar-label">Condição</span>
+                <p class="pillar-text">
+                  Integração das bases SINAPI, SIGEM e normativas em repositório
+                  único e atualizado.
+                </p>
+              </div>
+              <div class="hyp-pillar p2">
+                <span class="pillar-label">Mecanismo</span>
+                <p class="pillar-text">
+                  PLN com RAG (Retrieval-Augmented Generation) para consulta
+                  contextualizada em linguagem natural.
+                </p>
+              </div>
+              <div class="hyp-pillar p3">
+                <span class="pillar-label">Resultado esperado</span>
+                <p class="pillar-text">
+                  Estimativas com desvio aceitável em relação ao praticado e
+                  alta satisfação dos gestores.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 5: METODOLOGIA ══ -->
+      <div class="slide slide-standard" data-index="5">
+        <div class="slide-header">
+          <div class="logo-mark">
+            <div class="dot"></div>
+            <span class="wordmark">ConstruSUS IA</span>
+          </div>
+          <span class="slide-number">05 / 09</span>
+        </div>
+        <div class="slide-body">
+          <div class="section-tag">
+            <div class="tag-line"></div>
+            <span>Metodologia</span>
+          </div>
+          <h2 class="slide-title">
+            Pesquisa aplicada de <span class="accent">abordagem mista</span>
+          </h2>
+          <div class="method-layout">
+            <div class="method-flow">
+              <div class="method-step">
+                <div class="step-dot">1</div>
+                <div class="step-content">
+                  <div class="step-title">
+                    Revisão Sistemática e Coleta de Bases
+                  </div>
+                  <div class="step-desc">
+                    Levantamento e organização das bases SINAPI, SIGEM, RDC 50,
+                    SOMASUS e dados históricos de investimento da SES-GO.
+                    Extração, limpeza e estruturação em banco de dados
+                    relacional (PostgreSQL/Supabase).
+                  </div>
+                </div>
+              </div>
+              <div class="method-step">
+                <div class="step-dot">2</div>
+                <div class="step-content">
+                  <div class="step-title">
+                    Desenvolvimento do Assistente Virtual (ConstruSUS IA)
+                  </div>
+                  <div class="step-desc">
+                    Implementação do pipeline RAG com indexação vetorial
+                    (pgvector/HNSW), busca híbrida semântica e lexical (BM25),
+                    fusão de rankings (RRF) e geração de respostas via LLM
+                    (GPT-4o).
+                  </div>
+                </div>
+              </div>
+              <div class="method-step">
+                <div class="step-dot">3</div>
+                <div class="step-content">
+                  <div class="step-title">
+                    Teste Piloto — Ambiente Institucional
+                  </div>
+                  <div class="step-desc">
+                    Conduzido em hospital de grande porte e/ou Secretaria de
+                    Saúde estadual/municipal. Usuários-chave utilizarão o
+                    assistente em situações reais de planejamento, com
+                    supervisão do pesquisador.
+                  </div>
+                </div>
+              </div>
+              <div class="method-step">
+                <div class="step-dot">4</div>
+                <div class="step-content">
+                  <div class="step-title">Coleta de Dados e Análise</div>
+                  <div class="step-desc">
+                    Registros quantitativos de logs de interação + entrevistas
+                    semiestruturadas e grupos focais com gestores. Triangulação
+                    de dados quantitativos e qualitativos.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="method-right">
+              <div class="eval-box">
+                <div class="eval-title">Avaliações previstas</div>
+                <div class="eval-metric">
+                  <div class="metric-icon mi-blue">📊</div>
+                  <div class="eval-metric-text">
+                    <strong>Acurácia das Estimativas</strong>Desvio percentual
+                    entre as estimativas geradas pelo assistente e os custos
+                    realizados em obras hospitalares registradas — medida pelo
+                    Mean Absolute Percentage Error (MAPE) ao longo do tempo.
+                  </div>
+                </div>
+                <div class="eval-metric">
+                  <div class="metric-icon mi-teal">😊</div>
+                  <div class="eval-metric-text">
+                    <strong>Satisfação dos Gestores</strong>Avaliação
+                    padronizada da satisfação e usabilidade percebida por
+                    gestores de infraestrutura em saúde, por meio de
+                    questionário estruturado (escala Likert) e grupos focais.
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--sus-light);
+                  border-radius: 14px;
+                  padding: 16px 18px;
+                  border: 1px solid var(--border);
+                "
+              >
+                <div
+                  style="
+                    font-size: 10px;
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                    color: var(--sus-blue);
+                    font-weight: 600;
+                    margin-bottom: 8px;
+                  "
+                >
+                  Ética
+                </div>
+                <p
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--muted);
+                    line-height: 1.5;
+                  "
+                >
+                  O estudo não envolve dados pessoais de pacientes. Os
+                  procedimentos seguirão as diretrizes dos comitês de ética
+                  pertinentes e as normas da Res. CNS 510/2016.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 6: CRONOGRAMA ══ -->
+      <div class="slide slide-standard" data-index="6">
+        <div class="slide-header">
+          <div class="logo-mark">
+            <div class="dot"></div>
+            <span class="wordmark">ConstruSUS IA</span>
+          </div>
+          <span class="slide-number">06 / 09</span>
+        </div>
+        <div class="slide-body">
+          <div class="section-tag">
+            <div class="tag-line"></div>
+            <span>Cronograma</span>
+          </div>
+          <h2 class="slide-title">
+            24 meses até a <span class="accent">defesa — dezembro 2026</span>
+          </h2>
+          <div class="timeline-container">
+            <div class="tl-months">
+              <div class="tl-month-label">M1–3</div>
+              <div class="tl-month-label">M4–6</div>
+              <div class="tl-month-label">M7–9</div>
+              <div class="tl-month-label">M10–12</div>
+              <div class="tl-month-label">M13–18</div>
+              <div class="tl-month-label">M19–24</div>
+            </div>
+            <div class="timeline-row">
+              <div class="tl-label">
+                Revisão teórica e coleta de bases SUS/SINAPI
+              </div>
+              <div class="tl-bar-wrap">
+                <div class="tl-bar blue" style="left: 0%; width: 16.7%">
+                  Fase 1
+                </div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="tl-label">
+                Desenvolvimento do protótipo do chatbot
+              </div>
+              <div class="tl-bar-wrap">
+                <div class="tl-bar teal" style="left: 16.7%; width: 16.7%">
+                  Fase 2
+                </div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="tl-label">
+                Teste piloto — hospital / Secretaria de Saúde
+              </div>
+              <div class="tl-bar-wrap">
+                <div class="tl-bar accent" style="left: 33.4%; width: 16.7%">
+                  Fase 3
+                </div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="tl-label">Análise de dados e ajustes no sistema</div>
+              <div class="tl-bar-wrap">
+                <div class="tl-bar blue" style="left: 50.1%; width: 16.7%">
+                  Fase 4
+                </div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="tl-label">
+                Redação parcial da dissertação e aprofundamento teórico
+              </div>
+              <div class="tl-bar-wrap">
+                <div class="tl-bar teal" style="left: 54%; width: 29%">
+                  Fase 5
+                </div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="tl-label">
+                Consolidação dos resultados, redação final e defesa
+              </div>
+              <div class="tl-bar-wrap">
+                <div class="tl-bar gold" style="left: 75%; width: 25%">
+                  Fase 6 – Defesa
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              background: var(--sus-light);
+              border-radius: 12px;
+              padding: 14px 20px;
+              border: 1px solid var(--border);
+              margin-top: 12px;
+            "
+          >
+            <p style="font-size: 0.8rem; color: var(--muted); line-height: 1.6">
+              <strong style="color: var(--dark)">Status atual (2025):</strong> O
+              projeto encontra-se na Fase 1–2 simultânea — as bases SINAPI,
+              SIGEM e SOMASUS já estão sendo estruturadas em banco de dados e o
+              protótipo do assistente virtual está em desenvolvimento ativo.
             </p>
           </div>
         </div>
-        <div class="problem-right">
-          <div class="problem-stat">
-            <span class="num">3+</span>
-            <span class="desc">bases de dados oficiais sem integração (SINAPI, SIGEM, SOMASUS, RDC 50)</span>
+      </div>
+
+      <!-- ══ SLIDE 7: ORÇAMENTO ══ -->
+      <div class="slide slide-standard" data-index="7">
+        <div class="slide-header">
+          <div class="logo-mark">
+            <div class="dot"></div>
+            <span class="wordmark">ConstruSUS IA</span>
           </div>
-          <div class="problem-divider"></div>
-          <div class="problem-stat">
-            <span class="num">Mensal</span>
-            <span class="desc">frequência de atualização do SINAPI — raramente incorporada em tempo real</span>
+          <span class="slide-number">07 / 09</span>
+        </div>
+        <div class="slide-body">
+          <div class="section-tag">
+            <div class="tag-line"></div>
+            <span>Orçamento Estimado</span>
           </div>
-          <div class="problem-divider"></div>
-          <div class="problem-stat">
-            <span class="num">100%</span>
-            <span class="desc">manual — processo atual de consulta e estimativa de custos hospitalares</span>
+          <h2 class="slide-title">
+            Recursos necessários para
+            <span class="accent">24 meses de pesquisa</span>
+          </h2>
+          <div class="budget-grid">
+            <div class="budget-item">
+              <div class="budget-cat">Infraestrutura de TI</div>
+              <div class="budget-value">R$ 8.400</div>
+              <div class="budget-desc">
+                Serviços de cloud (Supabase/Vercel), API OpenAI (tokens de
+                desenvolvimento e testes), armazenamento e hospedagem por 24
+                meses.
+              </div>
+            </div>
+            <div class="budget-item">
+              <div class="budget-cat">Coleta &amp; Tratamento de Dados</div>
+              <div class="budget-value">R$ 4.200</div>
+              <div class="budget-desc">
+                Consultoria técnica para ETL das bases SINAPI/SIGEM,
+                digitalização de documentos normativos e licença de softwares de
+                análise.
+              </div>
+            </div>
+            <div class="budget-item">
+              <div class="budget-cat">Teste Piloto &amp; Campo</div>
+              <div class="budget-value">R$ 6.000</div>
+              <div class="budget-desc">
+                Deslocamentos, aplicação de instrumentos de pesquisa
+                (entrevistas, grupos focais), transcrições e honorários de
+                colaboradores de pesquisa.
+              </div>
+            </div>
+            <div class="budget-item">
+              <div class="budget-cat">Disseminação Científica</div>
+              <div class="budget-value">R$ 3.600</div>
+              <div class="budget-desc">
+                Taxa de publicação em periódico Qualis A, inscrição em
+                congressos nacionais de saúde coletiva e apresentações técnicas.
+              </div>
+            </div>
+            <div class="budget-item highlight-item">
+              <div class="budget-cat">Total Estimado (24 meses)</div>
+              <div class="budget-value">R$ 22.200</div>
+              <div class="budget-desc">
+                Orçamento conservador para execução integral da pesquisa,
+                incluindo contingência de 10%. Possibilidade de redução com
+                apoio institucional (SES-GO / universidade).
+              </div>
+            </div>
+          </div>
+          <div class="budget-note">
+            ⚠️ Parte significativa da infraestrutura tecnológica já está
+            disponível pelo pesquisador. O orçamento pode ser reduzido com
+            financiamento via editais FAPEG, CNPq ou acordo com a SES-GO para
+            disponibilização do ambiente piloto.
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ══ SLIDE 3: OBJETIVOS ══ -->
-  <div class="slide slide-standard" data-index="3">
-    <div class="slide-header">
-      <div class="logo-mark"><div class="dot"></div><span class="wordmark">ConstruSUS IA</span></div>
-      <span class="slide-number">03 / 09</span>
-    </div>
-    <div class="slide-body">
-      <div class="section-tag"><div class="tag-line"></div><span>Objetivos</span></div>
-      <h2 class="slide-title">O que o projeto <span class="accent">pretende alcançar</span></h2>
-      <div class="obj-main">
-        <div class="obj-main-label">Objetivo Geral</div>
-        <div class="obj-main-text">Desenvolver, implementar e avaliar um assistente virtual com Processamento de Linguagem Natural para apoiar profissionais e gestores do SUS na estimativa de custos, dimensionamento de área física e planejamento de recursos para construção, ampliação, reforma e manutenção de unidades de saúde — integrando SINAPI, SIGEM e manuais técnicos do Ministério da Saúde.</div>
+      <!-- ══ SLIDE 8: REFERÊNCIAS ══ -->
+      <div class="slide slide-standard" data-index="8">
+        <div class="slide-header">
+          <div class="logo-mark">
+            <div class="dot"></div>
+            <span class="wordmark">ConstruSUS IA</span>
+          </div>
+          <span class="slide-number">08 / 09</span>
+        </div>
+        <div class="slide-body">
+          <div class="section-tag">
+            <div class="tag-line"></div>
+            <span>Referências Bibliográficas</span>
+          </div>
+          <h2 class="slide-title">
+            Base <span class="accent">científica e normativa</span>
+          </h2>
+          <div class="refs-list">
+            <div class="ref-item">
+              <div class="ref-num">1</div>
+              <div class="ref-text">
+                BRASIL. Ministério da Saúde.
+                <em
+                  >Estabelecimentos Assistenciais de Saúde: Manual de
+                  Planejamento e Projetos Físicos.</em
+                >
+                Brasília: Ministério da Saúde, 2013.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">2</div>
+              <div class="ref-text">
+                BRASIL. Ministério da Saúde.
+                <em>Manual de Estrutura Física das Unidades de Saúde.</em>
+                Brasília, DF: Ministério da Saúde, 2019.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">3</div>
+              <div class="ref-text">
+                BRASIL. Ministério da Saúde.
+                <em
+                  >Normas para Projetos Físicos de Estabelecimentos
+                  Assistenciais de Saúde.</em
+                >
+                Brasília: Ministério da Saúde, 1994. ISBN 85-334-0092-6.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">4</div>
+              <div class="ref-text">
+                CAIXA ECONÔMICA FEDERAL.
+                <em
+                  >SINAPI – Sistema Nacional de Pesquisa de Custos e Índices da
+                  Construção Civil.</em
+                >
+                Disponível em: http://www.caixa.gov.br. Acesso em: 10 set. 2024.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">5</div>
+              <div class="ref-text">
+                GONÇALVES, Fernando.
+                <em
+                  >Processamento de Linguagem Natural: Vetorização e
+                  Computação.</em
+                >
+                São Paulo: Independente, 2024.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">6</div>
+              <div class="ref-text">
+                MENEZES, Gabriel.
+                <em
+                  >Construindo Chatbots com Python: Aprenda a Desenvolver um
+                  Chatbot Inteligente Usando PLN.</em
+                >
+                São Paulo: Novatec Editora, 2021.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">7</div>
+              <div class="ref-text">
+                SILVA, A. B. et al. Gestão de Infraestrutura Hospitalar:
+                Desafios e Oportunidades na Modernização do SUS.
+                <em>Revista de Administração em Saúde,</em> v. 12, n. 2, p.
+                33-42, 2024.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">8</div>
+              <div class="ref-text">
+                VIEIRA-DA-SILVA, L. M.; PAIM, J. S.; SCHRAIBER, L. B. O que é
+                saúde coletiva? In: PAIM, J. S. et al. (org.).
+                <em>Saúde e Sociedade,</em> v. 24, p. 205–218, 2015.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">9</div>
+              <div class="ref-text">
+                ABNT – Associação Brasileira de Normas Técnicas.
+                <em
+                  >NBR 15965-1: Sistemas de Classificação da Informação da
+                  Construção.</em
+                >
+                Rio de Janeiro: ABNT, 2011.
+              </div>
+            </div>
+            <div class="ref-item">
+              <div class="ref-num">10</div>
+              <div class="ref-text">
+                BRASIL. Ministério da Saúde. Portaria nº 2.048, de 5 de novembro
+                de 2002.
+                <em
+                  >Regulamento Técnico dos Sistemas Estaduais de Urgência e
+                  Emergência.</em
+                >
+                Diário Oficial da União, Brasília, DF, 7 nov. 2002.
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="obj-list">
-        <div class="obj-item"><div class="obj-num">1</div><div class="obj-item-text">Levantar e organizar as bases de dados oficiais (SINAPI, SIGEM e fontes complementares) que forneçam parâmetros de custos de obras, equipamentos e recursos para unidades de saúde.</div></div>
-        <div class="obj-item"><div class="obj-num">2</div><div class="obj-item-text">Desenvolver o módulo de PLN capaz de compreender perguntas em português e extrair intenções e entidades relacionadas a custos, materiais e dimensionamento físico.</div></div>
-        <div class="obj-item"><div class="obj-num">3</div><div class="obj-item-text">Treinar o motor de estimativa que agregue informações de custos de construção, equipamentos e manutenção, gerando respostas personalizadas por tipo e capacidade da unidade.</div></div>
-        <div class="obj-item"><div class="obj-num">4</div><div class="obj-item-text">Validar o assistente junto a profissionais e gestores do SUS, avaliando acurácia das estimativas e satisfação com a ferramenta.</div></div>
-        <div class="obj-item"><div class="obj-num">5</div><div class="obj-item-text">Propor estratégias de implementação e escalabilidade nos diferentes níveis de gestão do SUS, apoiando decisões de investimento em infraestrutura de saúde.</div></div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ══ SLIDE 4: HIPÓTESE ══ -->
-  <div class="slide slide-standard" data-index="4">
-    <div class="slide-header">
-      <div class="logo-mark"><div class="dot"></div><span class="wordmark">ConstruSUS IA</span></div>
-      <span class="slide-number">04 / 09</span>
-    </div>
-    <div class="slide-body">
-      <div class="section-tag"><div class="tag-line"></div><span>Hipótese</span></div>
-      <h2 class="slide-title">A hipótese central <span class="accent">da pesquisa</span></h2>
-      <div class="hyp-container">
-        <div class="hyp-main">
-          <p class="hyp-text">
-            A <span class="hl">padronização e integração</span> das bases de dados oficiais do SUS — SINAPI, SIGEM, RDC 50 e manuais técnicos do Ministério da Saúde — em um repositório estruturado e semânticamente indexado tornará possível, por meio de uma ferramenta de <span class="hl">linguagem natural baseada em Inteligência Artificial</span>, produzir estimativas de custo de infraestrutura hospitalar com acurácia comparável à prática convencional, reduzindo o tempo de resposta e aumentando a satisfação dos gestores responsáveis pelo planejamento físico do SUS.
+      <!-- ══ SLIDE 9: ENCERRAMENTO ══ -->
+      <div class="slide slide-closing" data-index="9">
+        <div class="cover-bg closing-bg"></div>
+        <div class="cover-grid"></div>
+        <div class="closing-content">
+          <div
+            class="cover-eyebrow"
+            style="justify-content: center; animation: none; opacity: 1"
+          >
+            <span class="line"></span>
+            <span>Mestrado Profissional em Saúde Coletiva</span>
+            <span class="line"></span>
+          </div>
+          <h2 class="closing-title">
+            ConstruSUS <span class="hl">IA</span><br />Um SUS mais eficiente,<br />planejado
+            e humano.
+          </h2>
+          <p class="closing-sub">
+            Obrigado pela atenção. Fico à disposição para as arguições.
           </p>
-          <p class="hyp-source">
-            Hipótese derivada da lacuna entre a disponibilidade de dados oficiais e a ausência de ferramentas integradas de consulta — identificada na prática profissional do pesquisador na gestão de obras hospitalares (SES-GO) e na literatura de saúde digital.
-          </p>
-        </div>
-        <div class="hyp-side">
-          <div class="hyp-pillar p1">
-            <span class="pillar-label">Condição</span>
-            <p class="pillar-text">Integração das bases SINAPI, SIGEM e normativas em repositório único e atualizado.</p>
-          </div>
-          <div class="hyp-pillar p2">
-            <span class="pillar-label">Mecanismo</span>
-            <p class="pillar-text">PLN com RAG (Retrieval-Augmented Generation) para consulta contextualizada em linguagem natural.</p>
-          </div>
-          <div class="hyp-pillar p3">
-            <span class="pillar-label">Resultado esperado</span>
-            <p class="pillar-text">Estimativas com desvio aceitável em relação ao praticado e alta satisfação dos gestores.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ SLIDE 5: METODOLOGIA ══ -->
-  <div class="slide slide-standard" data-index="5">
-    <div class="slide-header">
-      <div class="logo-mark"><div class="dot"></div><span class="wordmark">ConstruSUS IA</span></div>
-      <span class="slide-number">05 / 09</span>
-    </div>
-    <div class="slide-body">
-      <div class="section-tag"><div class="tag-line"></div><span>Metodologia</span></div>
-      <h2 class="slide-title">Pesquisa aplicada de <span class="accent">abordagem mista</span></h2>
-      <div class="method-layout">
-        <div class="method-flow">
-          <div class="method-step">
-            <div class="step-dot">1</div>
-            <div class="step-content">
-              <div class="step-title">Revisão Sistemática e Coleta de Bases</div>
-              <div class="step-desc">Levantamento e organização das bases SINAPI, SIGEM, RDC 50, SOMASUS e dados históricos de investimento da SES-GO. Extração, limpeza e estruturação em banco de dados relacional (PostgreSQL/Supabase).</div>
+          <div class="closing-contact">
+            <div class="contact-item">
+              <span class="contact-label">Autor</span>
+              <span class="contact-value">Pedro Augusto Barbosa Borges</span>
             </div>
-          </div>
-          <div class="method-step">
-            <div class="step-dot">2</div>
-            <div class="step-content">
-              <div class="step-title">Desenvolvimento do Assistente Virtual (ConstruSUS IA)</div>
-              <div class="step-desc">Implementação do pipeline RAG com indexação vetorial (pgvector/HNSW), busca híbrida semântica e lexical (BM25), fusão de rankings (RRF) e geração de respostas via LLM (GPT-4o).</div>
+            <div class="contact-item">
+              <span class="contact-label">Contato</span>
+              <span class="contact-value">pedroaugustobborges@gmail.com</span>
             </div>
-          </div>
-          <div class="method-step">
-            <div class="step-dot">3</div>
-            <div class="step-content">
-              <div class="step-title">Teste Piloto — Ambiente Institucional</div>
-              <div class="step-desc">Conduzido em hospital de grande porte e/ou Secretaria de Saúde estadual/municipal. Usuários-chave utilizarão o assistente em situações reais de planejamento, com supervisão do pesquisador.</div>
-            </div>
-          </div>
-          <div class="method-step">
-            <div class="step-dot">4</div>
-            <div class="step-content">
-              <div class="step-title">Coleta de Dados e Análise</div>
-              <div class="step-desc">Registros quantitativos de logs de interação + entrevistas semiestruturadas e grupos focais com gestores. Triangulação de dados quantitativos e qualitativos.</div>
+            <div class="contact-item">
+              <span class="contact-label">Orientação</span>
+              <span class="contact-value">Goiânia – GO, 2025</span>
             </div>
           </div>
         </div>
-        <div class="method-right">
-          <div class="eval-box">
-            <div class="eval-title">Avaliações previstas</div>
-            <div class="eval-metric">
-              <div class="metric-icon mi-blue">📊</div>
-              <div class="eval-metric-text"><strong>Acurácia das Estimativas</strong>Desvio percentual entre as estimativas geradas pelo assistente e os custos realizados em obras hospitalares registradas — medida pelo Mean Absolute Percentage Error (MAPE) ao longo do tempo.</div>
-            </div>
-            <div class="eval-metric">
-              <div class="metric-icon mi-teal">😊</div>
-              <div class="eval-metric-text"><strong>Satisfação dos Gestores</strong>Avaliação padronizada da satisfação e usabilidade percebida por gestores de infraestrutura em saúde, por meio de questionário estruturado (escala Likert) e grupos focais.</div>
-            </div>
-          </div>
-          <div style="background:var(--sus-light);border-radius:14px;padding:16px 18px;border:1px solid var(--border);">
-            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--sus-blue);font-weight:600;margin-bottom:8px;">Ética</div>
-            <p style="font-size:0.75rem;color:var(--muted);line-height:1.5;">O estudo não envolve dados pessoais de pacientes. Os procedimentos seguirão as diretrizes dos comitês de ética pertinentes e as normas da Res. CNS 510/2016.</p>
-          </div>
-        </div>
       </div>
     </div>
-  </div>
+    <!-- /presentation -->
 
-  <!-- ══ SLIDE 6: CRONOGRAMA ══ -->
-  <div class="slide slide-standard" data-index="6">
-    <div class="slide-header">
-      <div class="logo-mark"><div class="dot"></div><span class="wordmark">ConstruSUS IA</span></div>
-      <span class="slide-number">06 / 09</span>
+    <!-- NAVIGATION -->
+    <div class="nav" id="nav">
+      <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">
+        &#8592;
+      </button>
+      <div class="nav-dots" id="navDots"></div>
+      <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+        &#8594;
+      </button>
+      <span class="nav-progress" id="navProgress">1 / 10</span>
     </div>
-    <div class="slide-body">
-      <div class="section-tag"><div class="tag-line"></div><span>Cronograma</span></div>
-      <h2 class="slide-title">24 meses até a <span class="accent">defesa — dezembro 2026</span></h2>
-      <div class="timeline-container">
-        <div class="tl-months">
-          <div class="tl-month-label">M1–3</div>
-          <div class="tl-month-label">M4–6</div>
-          <div class="tl-month-label">M7–9</div>
-          <div class="tl-month-label">M10–12</div>
-          <div class="tl-month-label">M13–18</div>
-          <div class="tl-month-label">M19–24</div>
-        </div>
-        <div class="timeline-row">
-          <div class="tl-label">Revisão teórica e coleta de bases SUS/SINAPI</div>
-          <div class="tl-bar-wrap">
-            <div class="tl-bar blue" style="left:0%;width:16.7%;">Fase 1</div>
-          </div>
-        </div>
-        <div class="timeline-row">
-          <div class="tl-label">Desenvolvimento do protótipo do chatbot</div>
-          <div class="tl-bar-wrap">
-            <div class="tl-bar teal" style="left:16.7%;width:16.7%;">Fase 2</div>
-          </div>
-        </div>
-        <div class="timeline-row">
-          <div class="tl-label">Teste piloto — hospital / Secretaria de Saúde</div>
-          <div class="tl-bar-wrap">
-            <div class="tl-bar accent" style="left:33.4%;width:16.7%;">Fase 3</div>
-          </div>
-        </div>
-        <div class="timeline-row">
-          <div class="tl-label">Análise de dados e ajustes no sistema</div>
-          <div class="tl-bar-wrap">
-            <div class="tl-bar blue" style="left:50.1%;width:16.7%;">Fase 4</div>
-          </div>
-        </div>
-        <div class="timeline-row">
-          <div class="tl-label">Redação parcial da dissertação e aprofundamento teórico</div>
-          <div class="tl-bar-wrap">
-            <div class="tl-bar teal" style="left:54%;width:29%;">Fase 5</div>
-          </div>
-        </div>
-        <div class="timeline-row">
-          <div class="tl-label">Consolidação dos resultados, redação final e defesa</div>
-          <div class="tl-bar-wrap">
-            <div class="tl-bar gold" style="left:75%;width:25%;">Fase 6 – Defesa</div>
-          </div>
-        </div>
-      </div>
-      <div style="background:var(--sus-light);border-radius:12px;padding:14px 20px;border:1px solid var(--border);margin-top:12px;">
-        <p style="font-size:0.8rem;color:var(--muted);line-height:1.6;">
-          <strong style="color:var(--dark);">Status atual (2025):</strong> O projeto encontra-se na Fase 1–2 simultânea — as bases SINAPI, SIGEM e SOMASUS já estão sendo estruturadas em banco de dados e o protótipo do assistente virtual está em desenvolvimento ativo.
-        </p>
-      </div>
-    </div>
-  </div>
 
-  <!-- ══ SLIDE 7: ORÇAMENTO ══ -->
-  <div class="slide slide-standard" data-index="7">
-    <div class="slide-header">
-      <div class="logo-mark"><div class="dot"></div><span class="wordmark">ConstruSUS IA</span></div>
-      <span class="slide-number">07 / 09</span>
-    </div>
-    <div class="slide-body">
-      <div class="section-tag"><div class="tag-line"></div><span>Orçamento Estimado</span></div>
-      <h2 class="slide-title">Recursos necessários para <span class="accent">24 meses de pesquisa</span></h2>
-      <div class="budget-grid">
-        <div class="budget-item">
-          <div class="budget-cat">Infraestrutura de TI</div>
-          <div class="budget-value">R$ 8.400</div>
-          <div class="budget-desc">Serviços de cloud (Supabase/Vercel), API OpenAI (tokens de desenvolvimento e testes), armazenamento e hospedagem por 24 meses.</div>
-        </div>
-        <div class="budget-item">
-          <div class="budget-cat">Coleta &amp; Tratamento de Dados</div>
-          <div class="budget-value">R$ 4.200</div>
-          <div class="budget-desc">Consultoria técnica para ETL das bases SINAPI/SIGEM, digitalização de documentos normativos e licença de softwares de análise.</div>
-        </div>
-        <div class="budget-item">
-          <div class="budget-cat">Teste Piloto &amp; Campo</div>
-          <div class="budget-value">R$ 6.000</div>
-          <div class="budget-desc">Deslocamentos, aplicação de instrumentos de pesquisa (entrevistas, grupos focais), transcrições e honorários de colaboradores de pesquisa.</div>
-        </div>
-        <div class="budget-item">
-          <div class="budget-cat">Disseminação Científica</div>
-          <div class="budget-value">R$ 3.600</div>
-          <div class="budget-desc">Taxa de publicação em periódico Qualis A, inscrição em congressos nacionais de saúde coletiva e apresentações técnicas.</div>
-        </div>
-        <div class="budget-item highlight-item">
-          <div class="budget-cat">Total Estimado (24 meses)</div>
-          <div class="budget-value">R$ 22.200</div>
-          <div class="budget-desc">Orçamento conservador para execução integral da pesquisa, incluindo contingência de 10%. Possibilidade de redução com apoio institucional (SES-GO / universidade).</div>
-        </div>
-      </div>
-      <div class="budget-note">
-        ⚠️ Parte significativa da infraestrutura tecnológica já está disponível pelo pesquisador. O orçamento pode ser reduzido com financiamento via editais FAPEG, CNPq ou acordo com a SES-GO para disponibilização do ambiente piloto.
-      </div>
-    </div>
-  </div>
+    <script>
+      const slides = document.querySelectorAll(".slide");
+      const navDots = document.getElementById("navDots");
+      const navProgress = document.getElementById("navProgress");
+      let current = 0;
 
-  <!-- ══ SLIDE 8: REFERÊNCIAS ══ -->
-  <div class="slide slide-standard" data-index="8">
-    <div class="slide-header">
-      <div class="logo-mark"><div class="dot"></div><span class="wordmark">ConstruSUS IA</span></div>
-      <span class="slide-number">08 / 09</span>
-    </div>
-    <div class="slide-body">
-      <div class="section-tag"><div class="tag-line"></div><span>Referências Bibliográficas</span></div>
-      <h2 class="slide-title">Base <span class="accent">científica e normativa</span></h2>
-      <div class="refs-list">
-        <div class="ref-item">
-          <div class="ref-num">1</div>
-          <div class="ref-text">BRASIL. Ministério da Saúde. <em>Estabelecimentos Assistenciais de Saúde: Manual de Planejamento e Projetos Físicos.</em> Brasília: Ministério da Saúde, 2013.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">2</div>
-          <div class="ref-text">BRASIL. Ministério da Saúde. <em>Manual de Estrutura Física das Unidades de Saúde.</em> Brasília, DF: Ministério da Saúde, 2019.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">3</div>
-          <div class="ref-text">BRASIL. Ministério da Saúde. <em>Normas para Projetos Físicos de Estabelecimentos Assistenciais de Saúde.</em> Brasília: Ministério da Saúde, 1994. ISBN 85-334-0092-6.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">4</div>
-          <div class="ref-text">CAIXA ECONÔMICA FEDERAL. <em>SINAPI – Sistema Nacional de Pesquisa de Custos e Índices da Construção Civil.</em> Disponível em: http://www.caixa.gov.br. Acesso em: 10 set. 2024.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">5</div>
-          <div class="ref-text">GONÇALVES, Fernando. <em>Processamento de Linguagem Natural: Vetorização e Computação.</em> São Paulo: Independente, 2024.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">6</div>
-          <div class="ref-text">MENEZES, Gabriel. <em>Construindo Chatbots com Python: Aprenda a Desenvolver um Chatbot Inteligente Usando PLN.</em> São Paulo: Novatec Editora, 2021.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">7</div>
-          <div class="ref-text">SILVA, A. B. et al. Gestão de Infraestrutura Hospitalar: Desafios e Oportunidades na Modernização do SUS. <em>Revista de Administração em Saúde,</em> v. 12, n. 2, p. 33-42, 2024.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">8</div>
-          <div class="ref-text">VIEIRA-DA-SILVA, L. M.; PAIM, J. S.; SCHRAIBER, L. B. O que é saúde coletiva? In: PAIM, J. S. et al. (org.). <em>Saúde e Sociedade,</em> v. 24, p. 205–218, 2015.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">9</div>
-          <div class="ref-text">ABNT – Associação Brasileira de Normas Técnicas. <em>NBR 15965-1: Sistemas de Classificação da Informação da Construção.</em> Rio de Janeiro: ABNT, 2011.</div>
-        </div>
-        <div class="ref-item">
-          <div class="ref-num">10</div>
-          <div class="ref-text">BRASIL. Ministério da Saúde. Portaria nº 2.048, de 5 de novembro de 2002. <em>Regulamento Técnico dos Sistemas Estaduais de Urgência e Emergência.</em> Diário Oficial da União, Brasília, DF, 7 nov. 2002.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+      // Build dots
+      slides.forEach((_, i) => {
+        const d = document.createElement("div");
+        d.className = "nav-dot" + (i === 0 ? " active" : "");
+        d.onclick = () => goTo(i);
+        navDots.appendChild(d);
+      });
 
-  <!-- ══ SLIDE 9: ENCERRAMENTO ══ -->
-  <div class="slide slide-closing" data-index="9">
-    <div class="cover-bg closing-bg"></div>
-    <div class="cover-grid"></div>
-    <div class="closing-content">
-      <div class="cover-eyebrow" style="justify-content:center; animation:none; opacity:1;">
-        <span class="line"></span>
-        <span>Mestrado Profissional em Saúde Coletiva</span>
-        <span class="line"></span>
-      </div>
-      <h2 class="closing-title">ConstruSUS <span class="hl">IA</span><br>Um SUS mais eficiente,<br>planejado e humano.</h2>
-      <p class="closing-sub">Obrigado pela atenção. Fico à disposição para as arguições.</p>
-      <div class="closing-contact">
-        <div class="contact-item">
-          <span class="contact-label">Autor</span>
-          <span class="contact-value">Pedro Augusto Barbosa Borges</span>
-        </div>
-        <div class="contact-item">
-          <span class="contact-label">Contato</span>
-          <span class="contact-value">pedroaugustobborges@gmail.com</span>
-        </div>
-        <div class="contact-item">
-          <span class="contact-label">Orientação</span>
-          <span class="contact-value">Goiânia – GO, 2025</span>
-        </div>
-      </div>
-    </div>
-  </div>
+      function updateNav() {
+        document.querySelectorAll(".nav-dot").forEach((d, i) => {
+          d.classList.toggle("active", i === current);
+        });
+        navProgress.textContent = `${current + 1} / ${slides.length}`;
+      }
 
-</div><!-- /presentation -->
+      function goTo(idx) {
+        if (idx === current) return;
+        slides[current].classList.remove("active");
+        slides[current].classList.add("exiting");
+        setTimeout(() => slides[current].classList.remove("exiting"), 450);
+        current = idx;
+        slides[current].classList.add("active");
+        updateNav();
+      }
 
-<!-- NAVIGATION -->
-<div class="nav" id="nav">
-  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&#8592;</button>
-  <div class="nav-dots" id="navDots"></div>
-  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">&#8594;</button>
-  <span class="nav-progress" id="navProgress">1 / 10</span>
-</div>
+      function changeSlide(dir) {
+        const next = Math.max(0, Math.min(slides.length - 1, current + dir));
+        goTo(next);
+      }
 
-<script>
-  const slides = document.querySelectorAll('.slide');
-  const navDots = document.getElementById('navDots');
-  const navProgress = document.getElementById('navProgress');
-  let current = 0;
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") changeSlide(1);
+        if (e.key === "ArrowLeft" || e.key === "ArrowUp") changeSlide(-1);
+      });
 
-  // Build dots
-  slides.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'nav-dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => goTo(i);
-    navDots.appendChild(d);
-  });
-
-  function updateNav() {
-    document.querySelectorAll('.nav-dot').forEach((d, i) => {
-      d.classList.toggle('active', i === current);
-    });
-    navProgress.textContent = `${current + 1} / ${slides.length}`;
-  }
-
-  function goTo(idx) {
-    if (idx === current) return;
-    slides[current].classList.remove('active');
-    slides[current].classList.add('exiting');
-    setTimeout(() => slides[current].classList.remove('exiting'), 450);
-    current = idx;
-    slides[current].classList.add('active');
-    updateNav();
-  }
-
-  function changeSlide(dir) {
-    const next = Math.max(0, Math.min(slides.length - 1, current + dir));
-    goTo(next);
-  }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
-  });
-
-  updateNav();
-</script>
-</body>
+      updateNav();
+    </script>
+  </body>
 </html>

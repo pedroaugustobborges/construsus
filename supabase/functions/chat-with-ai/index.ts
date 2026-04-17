@@ -222,6 +222,191 @@ Retorne APENAS um JSON com o formato: {"scores": [score1, score2, ...]}`,
   }
 }
 
+// ─── Structured Table Search ─────────────────────────────────────────────────
+// Extracts meaningful Portuguese keywords (ignores stopwords and source names)
+const STOPWORDS = new Set([
+  "o","a","os","as","um","uma","uns","umas","de","do","da","dos","das",
+  "em","no","na","nos","nas","para","por","com","sem","que","qual","quais",
+  "como","quando","onde","quanto","quem","segundo","pela","pelo","pelas","pelos",
+  "este","esta","esse","essa","aquele","aquela","seu","sua","seus","suas",
+  "não","mais","muito","também","mas","ou","e","se","ao","aos",
+  "preço","custo","valor","médio","média","tabela","lista","sobre","existe",
+  "tem","ter","são","ser","está","me","diga","fale","pode","obter","quero",
+  "buscar","encontrar","listar","mostrar","apresentar","informar","devo",
+  "preciso","gostaria","saber","qual","quero","tipo","tipos","tipos",
+]);
+const SOURCE_NAMES = new Set(["sigem","sinapi","somasus","rdc","anvisa","cef","ibge"]);
+
+function extractKeywords(query: string): string[] {
+  return query
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // strip accents for matching
+    .replace(/[?!.,;:()]/g, " ")
+    .split(/\s+/)
+    .filter(w => w.length > 3 && !STOPWORDS.has(w) && !SOURCE_NAMES.has(w))
+    .slice(0, 4);
+}
+
+function fmtBRL(v: number | null): string {
+  if (v === null || v === undefined) return "N/D";
+  return `R$ ${Number(v).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
+}
+
+async function searchStructuredTables(
+  supabase: ReturnType<typeof createClient>,
+  query: string,
+): Promise<string> {
+  const lower = query.toLowerCase();
+  const lowerNorm = lower.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const keywords = extractKeywords(query);
+  const sections: string[] = [];
+
+  // ── Detect intent ────────────────────────────────────────────────────────────
+  const wantsSigem =
+    lower.includes("sigem") || lower.includes("renem") ||
+    lowerNorm.includes("equipamento") || lowerNorm.includes("aparelho") ||
+    lowerNorm.includes("tomografo") || lowerNorm.includes("ressonancia") ||
+    lowerNorm.includes("ultrassom") || lowerNorm.includes("monitor") ||
+    lowerNorm.includes("ventilador") || lowerNorm.includes("bisturi") ||
+    lowerNorm.includes("autoclave") || lowerNorm.includes("desfibrilador") ||
+    lowerNorm.includes("microscopio") || lowerNorm.includes("endoscopio") ||
+    lowerNorm.includes("raio-x") || lowerNorm.includes("raio x") ||
+    lowerNorm.includes("maca") || lowerNorm.includes("cadeira") ||
+    lowerNorm.includes("eletrocardiografo") || lowerNorm.includes("incubadora") ||
+    lowerNorm.includes("equipamento medico") || lowerNorm.includes("material permanente");
+
+  const wantsSinapiInsumo =
+    lower.includes("sinapi") || lowerNorm.includes("insumo") ||
+    lowerNorm.includes("cimento") || lowerNorm.includes("areia") ||
+    lowerNorm.includes("aco") || lowerNorm.includes("tijolo") ||
+    lowerNorm.includes("concreto") || lowerNorm.includes("tinta") ||
+    lowerNorm.includes("fio eletrico") || lowerNorm.includes("tubo") ||
+    lowerNorm.includes("material de construcao") || lowerNorm.includes("revestimento");
+
+  const wantsSinapiComp =
+    lower.includes("sinapi") && (lowerNorm.includes("composicao") || lowerNorm.includes("servico")) ||
+    lowerNorm.includes("mao de obra") || lowerNorm.includes("pintura") ||
+    lowerNorm.includes("assentamento") || lowerNorm.includes("instalacao eletrica") ||
+    lowerNorm.includes("fundacao") || lowerNorm.includes("alvenaria");
+
+  const wantsSomasus =
+    lower.includes("somasus") || lowerNorm.includes("policlinica") ||
+    lowerNorm.includes("orcamento referencia") || lowerNorm.includes("planilha orcamentaria");
+
+  // ── SIGEM search ─────────────────────────────────────────────────────────────
+  if (wantsSigem && keywords.length > 0) {
+    for (const kw of keywords) {
+      const { data } = await supabase
+        .from("sigem_equipamentos")
+        .select("codigo,nome,classificacao,valor_sugerido,dolarizado,especificacao")
+        .ilike("nome", `%${kw}%`)
+        .limit(20);
+
+      if (data && data.length > 0) {
+        const rows = data.map((eq: Record<string, unknown>) =>
+          `| ${eq.codigo} | ${eq.nome} | ${eq.classificacao ?? "-"} | ${fmtBRL(eq.valor_sugerido as number | null)} | ${eq.dolarizado ? "USD" : "BRL"} |`
+        ).join("\n");
+
+        sections.push(
+          `### SIGEM – Equipamentos RENEM (Referência Nov/2024)\n` +
+          `Busca: "${kw}"\n\n` +
+          `| Código | Nome | Classificação | Valor Sugerido | Moeda |\n` +
+          `|--------|------|---------------|----------------|-------|\n` +
+          rows +
+          `\n\n*Fonte: SIGEM/RENEM – Sistema de Gerenciamento de Material Médico-Hospitalar*`
+        );
+        break; // found results, stop trying other keywords
+      }
+    }
+  }
+
+  // ── SINAPI Insumos search ─────────────────────────────────────────────────────
+  if (wantsSinapiInsumo && keywords.length > 0) {
+    for (const kw of keywords) {
+      const { data } = await supabase
+        .from("sinapi_insumos")
+        .select("codigo,descricao,unidade,preco_go,preco_sp,origem_preco")
+        .ilike("descricao", `%${kw}%`)
+        .not("preco_go", "is", null)
+        .limit(20);
+
+      if (data && data.length > 0) {
+        const rows = data.map((ins: Record<string, unknown>) =>
+          `| ${ins.codigo} | ${ins.descricao} | ${ins.unidade ?? "-"} | ${fmtBRL(ins.preco_go as number | null)} | ${fmtBRL(ins.preco_sp as number | null)} |`
+        ).join("\n");
+
+        sections.push(
+          `### SINAPI – Insumos (Referência Mar/2026, sem desoneração)\n` +
+          `Busca: "${kw}"\n\n` +
+          `| Código | Descrição | Unidade | Preço GO | Preço SP |\n` +
+          `|--------|-----------|---------|----------|----------|\n` +
+          rows +
+          `\n\n*Fonte: SINAPI/CEF – tabela de insumos, estado de Goiás (GO)*`
+        );
+        break;
+      }
+    }
+  }
+
+  // ── SINAPI Composições search ─────────────────────────────────────────────────
+  if (wantsSinapiComp && keywords.length > 0) {
+    for (const kw of keywords) {
+      const { data } = await supabase
+        .from("sinapi_composicoes")
+        .select("codigo,descricao,grupo,unidade,custo_go,custo_sp")
+        .ilike("descricao", `%${kw}%`)
+        .not("custo_go", "is", null)
+        .limit(15);
+
+      if (data && data.length > 0) {
+        const rows = data.map((comp: Record<string, unknown>) =>
+          `| ${comp.codigo ?? "-"} | ${comp.descricao} | ${comp.unidade ?? "-"} | ${fmtBRL(comp.custo_go as number | null)} | ${fmtBRL(comp.custo_sp as number | null)} |`
+        ).join("\n");
+
+        sections.push(
+          `### SINAPI – Composições (Referência Mar/2026, sem desoneração)\n` +
+          `Busca: "${kw}"\n\n` +
+          `| Código | Descrição | Unidade | Custo GO | Custo SP |\n` +
+          `|--------|-----------|---------|----------|----------|\n` +
+          rows +
+          `\n\n*Fonte: SINAPI/CEF – tabela de composições analíticas*`
+        );
+        break;
+      }
+    }
+  }
+
+  // ── SOMASUS Policlínica search ─────────────────────────────────────────────────
+  if (wantsSomasus && keywords.length > 0) {
+    for (const kw of keywords) {
+      const { data } = await supabase
+        .from("somasus_orcamento")
+        .select("hierarquia,codigo,banco,descricao,unidade,quantidade,grupo_principal")
+        .ilike("descricao", `%${kw}%`)
+        .eq("tipo_linha", "item")
+        .limit(20);
+
+      if (data && data.length > 0) {
+        const rows = data.map((item: Record<string, unknown>) =>
+          `| ${item.hierarquia} | ${item.descricao} | ${item.banco ?? "-"} | ${item.unidade ?? "-"} | ${item.quantidade ?? "-"} | ${item.grupo_principal ?? "-"} |`
+        ).join("\n");
+
+        sections.push(
+          `### SOMASUS – Orçamento Policlínica MS (Referência Nov/2023, 3.213 m²)\n` +
+          `Busca: "${kw}"\n\n` +
+          `| Hierarquia | Descrição | Banco | Unidade | Quantidade | Grupo |\n` +
+          `|------------|-----------|-------|---------|------------|-------|\n` +
+          rows +
+          `\n\n*Fonte: SOMASUS/MS – Planilha orçamentária de referência Policlínica, sem desoneração*`
+        );
+        break;
+      }
+    }
+  }
+
+  return sections.join("\n\n");
+}
+
 // ─── Main Handler ─────────────────────────────────────────────────────────────
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -308,8 +493,9 @@ serve(async (req) => {
       console.error("RAG pipeline error (continuing without context):", ragErr);
     }
 
-    // ── STEP 7: Build context string ──────────────────────────────────────────
-    const contextString = finalContext
+    // ── STEP 7: Build context string ─────────────────────────────────────────
+    // 7a. RAG context (knowledge_base)
+    const ragContext = finalContext
       .map((chunk, i) => {
         const meta = chunk.metadata ?? {};
         const header = [
@@ -317,40 +503,53 @@ serve(async (req) => {
           meta.secao && `Seção: ${meta.secao}`,
           meta.titulo && `Título: ${meta.titulo}`,
           meta.ano && `Ano: ${meta.ano}`,
-        ]
-          .filter(Boolean)
-          .join(" | ");
-
+        ].filter(Boolean).join(" | ");
         return `[Fonte ${i + 1}${header ? ` – ${header}` : ""}]\n${chunk.content}`;
       })
       .join("\n\n---\n\n");
 
-    const hasContext = contextString.trim().length > 0;
+    // 7b. Direct structured table search (SIGEM, SINAPI, SOMASUS)
+    let tableContext = "";
+    try {
+      tableContext = await searchStructuredTables(supabase, message);
+    } catch (err) {
+      console.error("Structured search error:", err);
+    }
+
+    const fullContext = [ragContext, tableContext].filter(s => s.trim()).join("\n\n---\n\n");
+    const hasContext = fullContext.trim().length > 0;
 
     // ── STEP 8: Build prompt & call OpenAI ───────────────────────────────────
-    const systemPrompt = `Você é o ConstruSUS IA, um especialista em engenharia hospitalar pública e planejamento de infraestrutura de saúde do SUS (Sistema Único de Saúde). Você foi desenvolvido pela Secretaria de Estado da Saúde de Goiás (SES-GO).
+    const systemPrompt = `Você é o ConstruSUS IA, assistente especializado em engenharia hospitalar pública e infraestrutura do SUS, desenvolvido pela Secretaria de Estado da Saúde de Goiás (SES-GO).
 
-Suas especialidades incluem:
-- Normas ANVISA (RDC 50/2002 e atualizações) para projetos físicos de estabelecimentos de saúde
-- Tabela SINAPI de custos de construção civil
-- SIGEM (equipamentos médico-hospitalares)
-- SOMASUS (parâmetros de programação de saúde)
-- Planejamento e orçamento de obras hospitalares
-- Gestão de infraestrutura do SUS
+Suas bases de dados incluem:
+- SINAPI Mar/2026 (insumos e composições, sem desoneração, referência GO/SP)
+- SIGEM/RENEM Nov/2024 (equipamentos médico-hospitalares permanentes)
+- SOMASUS Nov/2023 (orçamento de referência Policlínica, 3.213 m²)
+- RDC 50/2002 ANVISA (normas físicas para estabelecimentos de saúde)
 
-${hasContext ? `CONTEXTO RECUPERADO (use EXCLUSIVAMENTE estas informações para responder):
-===
-${contextString}
-===
+${hasContext ? `## DADOS ENCONTRADOS
 
-INSTRUÇÕES CRÍTICAS:
-- Responda EXCLUSIVAMENTE com base no contexto acima
-- Se o contexto não contiver informação suficiente, diga: "Não encontrei dados suficientes na base de conhecimento sobre este tema específico. Recomendo consultar diretamente [fonte relevante]."
-- Cite sempre a fonte (ex: "Conforme RDC 50, Seção X.X.X...")
-- Formate tabelas em Markdown quando apresentar dados comparativos
-- Use R$ e m² corretamente para valores monetários e áreas` : `INSTRUÇÃO: Não encontrei documentos relevantes na base de conhecimento para esta pergunta específica. Informe ao usuário que não possui dados suficientes nesta base e sugira as fontes oficiais (RDC 50 ANVISA, portal SINAPI da CEF, SOMASUS do Ministério da Saúde).`}
+${fullContext}
 
-Responda sempre em português brasileiro. Seja preciso, técnico e objetivo.`;
+## INSTRUÇÕES
+- Responda com base nos dados acima, que foram extraídos diretamente das bases de dados oficiais
+- Apresente tabelas Markdown quando houver múltiplos itens com preços ou quantidades
+- Calcule médias, totais ou comparações quando solicitado
+- Cite a fonte e data de referência de cada dado (ex: "SIGEM Nov/2024", "SINAPI Mar/2026 – GO")
+- Use português brasileiro correto e linguagem técnica apropriada
+- Se os dados encontrados não responderem completamente à pergunta, indique o que foi encontrado e sugira onde buscar o restante` : `## INSTRUÇÃO
+Não foram encontrados dados específicos nas bases de dados para esta consulta.
+Informe ao usuário de forma clara e correta em português, e sugira as fontes oficiais: SIGEM (saude.gov.br/sigem), SINAPI (caixa.gov.br/sinapi), SOMASUS (somasus.saude.gov.br), ou RDC 50 (ANVISA).
+Não invente dados, preços ou normas.`}
+
+Responda sempre em português brasileiro correto e formal. Não use gírias. Não invente informações.`;
+
+    const messages = [
+      { role: "system", content: systemPrompt },
+      ...history.slice(-6).map((h) => ({ role: h.role, content: h.content })),
+      { role: "user", content: message },
+    ];
 
     const messages = [
       { role: "system", content: systemPrompt },
