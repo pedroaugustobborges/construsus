@@ -1368,8 +1368,9 @@
             <span>Problema de Pesquisa</span>
           </div>
           <h2 class="slide-title">
-            Despadronização causa
-            <span class="accent">fragmentação e perda de dados históricos</span
+            Dificuldade de se estimar custos devido à
+            <span class="accent"
+              >fragmentação e perda de dados históricos de infraestrutura</span
             ><br />
           </h2>
           <div class="problem-visual">
@@ -1383,7 +1384,7 @@
                   tipologia.
                 </div>
               </div>
-              <div class="issue-item">
+              <!-- <div class="issue-item">
                 <div class="issue-icon">⚠️</div>
                 <div class="issue-text">
                   <strong>Despadronização metodológica</strong>Ausência de
@@ -1391,7 +1392,7 @@
                   adotar o mesmo referencial de custo e área física mínima
                   exigida pela RDC 50.
                 </div>
-              </div>
+              </div> -->
               <div class="issue-item">
                 <div class="issue-icon">🕒</div>
                 <div class="issue-text">
@@ -1424,11 +1425,12 @@
                     line-height: 1.6;
                   "
                 >
-                  <strong>Pergunta norteadora:</strong> Em que medida um
-                  assistente virtual baseado em PLN, integrado às bases oficiais
-                  do SUS, é capaz de produzir estimativas de custo de
-                  infraestrutura hospitalar com acurácia comparável à prática
-                  técnica convencional e satisfação dos usuários gestores?
+                  <strong>Pergunta norteadora:</strong> Com cenário de dados
+                  fragmentos, em que medida um assistente virtual baseado em
+                  PLN, integrado às bases oficiais do SUS, é capaz de produzir
+                  estimativas de custo de infraestrutura hospitalar com acurácia
+                  comparável à prática técnica convencional e que cause
+                  satisfação dos usuários gestores?
                 </p>
               </div>
             </div>
@@ -1486,7 +1488,8 @@
               gestores do SUS na estimativa de custos, dimensionamento de área
               física e planejamento de recursos para construção, ampliação,
               reforma e manutenção de unidades de saúde — integrando SINAPI,
-              SIGEM e manuais técnicos do Ministério da Saúde.
+              SIGEM, histórico de gastos em infraestrutura e manuais técnicos do
+              Ministério da Saúde.
             </div>
           </div>
           <div class="obj-list">
@@ -1554,31 +1557,28 @@
           <div class="hyp-container">
             <div class="hyp-main">
               <p class="hyp-text">
-                A <span class="hl">padronização e integração</span> das bases de
-                dados oficiais do SUS — SINAPI, SIGEM, RDC 50 e manuais técnicos
-                do Ministério da Saúde — em um repositório estruturado e
-                semânticamente indexado tornará possível, por meio de uma
-                ferramenta de
+                A utilização de ferramenta de
+
                 <span class="hl"
                   >linguagem natural baseada em Inteligência Artificial</span
-                >, produzir estimativas de custo de infraestrutura hospitalar
-                com acurácia comparável à prática convencional, reduzindo o
-                tempo de resposta e aumentando a satisfação dos gestores
-                responsáveis pelo planejamento físico do SUS.
+                >, será capaz de produzir estimativas de custo de infraestrutura
+                hospitalar com acurácia comparável à prática convencional,
+                reduzindo o tempo de resposta e aumentando a satisfação dos
+                gestores responsáveis pelo planejamento físico do SUS.
               </p>
               <p class="hyp-source">
                 Hipótese derivada da lacuna entre a disponibilidade de dados
                 oficiais e a ausência de ferramentas integradas de consulta —
                 identificada na prática profissional do pesquisador na gestão de
-                obras hospitalares (SES-GO) e na literatura de saúde digital.
+                obras hospitalares e na literatura de saúde digital.
               </p>
             </div>
             <div class="hyp-side">
               <div class="hyp-pillar p1">
                 <span class="pillar-label">Condição</span>
                 <p class="pillar-text">
-                  Integração das bases SINAPI, SIGEM e normativas em repositório
-                  único e atualizado.
+                  Criação de repositório único e atualizado das bases SINAPI,
+                  SIGEM, SOMASUS, normativas e históricos de obras.
                 </p>
               </div>
               <div class="hyp-pillar p2">
@@ -1592,7 +1592,7 @@
                 <span class="pillar-label">Resultado esperado</span>
                 <p class="pillar-text">
                   Estimativas com desvio aceitável em relação ao praticado e
-                  alta satisfação dos gestores.
+                  satisfação dos gestores.
                 </p>
               </div>
             </div>
@@ -1667,8 +1667,8 @@
                   <div class="step-title">Coleta de Dados e Análise</div>
                   <div class="step-desc">
                     Registros quantitativos de logs de interação + entrevistas
-                    semiestruturadas e grupos focais com gestores. Triangulação
-                    de dados quantitativos e qualitativos.
+                    semiestruturadas com gestores. Triangulação de dados
+                    quantitativos e qualitativos.
                   </div>
                 </div>
               </div>
@@ -1827,7 +1827,7 @@
             "
           >
             <p style="font-size: 0.8rem; color: var(--muted); line-height: 1.6">
-              <strong style="color: var(--dark)">Status atual (2025):</strong> O
+              <strong style="color: var(--dark)">Status atual (2026):</strong> O
               projeto encontra-se na Fase 1–2 simultânea — as bases SINAPI,
               SIGEM e SOMASUS já estão sendo estruturadas em banco de dados e o
               protótipo do assistente virtual está em desenvolvimento ativo.
@@ -1859,9 +1859,9 @@
               <div class="budget-cat">Infraestrutura de TI</div>
               <div class="budget-value">R$ 8.400</div>
               <div class="budget-desc">
-                Serviços de cloud (Supabase/Vercel), API OpenAI (tokens de
-                desenvolvimento e testes), armazenamento e hospedagem por 24
-                meses.
+                Serviços de desenvolvimento do pesquisador e de cloud
+                (Supabase/Vercel), API OpenAI (tokens de desenvolvimento e
+                testes), armazenamento e hospedagem por 24 meses.
               </div>
             </div>
             <div class="budget-item">
@@ -1893,18 +1893,17 @@
             <div class="budget-item highlight-item">
               <div class="budget-cat">Total Estimado (24 meses)</div>
               <div class="budget-value">R$ 22.200</div>
-              <div class="budget-desc">
+              <!-- <div class="budget-desc">
                 Orçamento conservador para execução integral da pesquisa,
                 incluindo contingência de 10%. Possibilidade de redução com
                 apoio institucional (SES-GO / universidade).
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="budget-note">
             ⚠️ Parte significativa da infraestrutura tecnológica já está
-            disponível pelo pesquisador. O orçamento pode ser reduzido com
-            financiamento via editais FAPEG, CNPq ou acordo com a SES-GO para
-            disponibilização do ambiente piloto.
+            disponível pelo pesquisador. O orçamento pode ser reduzido mediante
+            parcerias.
           </div>
         </div>
       </div>
@@ -1921,11 +1920,9 @@
         <div class="slide-body">
           <div class="section-tag">
             <div class="tag-line"></div>
-            <span>Referências Bibliográficas</span>
+            <!-- <span>Referências Bibliográficas</span> -->
           </div>
-          <h2 class="slide-title">
-            Base <span class="accent">científica e normativa</span>
-          </h2>
+          <h2 class="slide-title">Referências Bibliográficas</h2>
           <div class="refs-list">
             <div class="ref-item">
               <div class="ref-num">1</div>
