@@ -551,12 +551,6 @@ Responda sempre em português brasileiro correto e formal. Não use gírias. Nã
       { role: "user", content: message },
     ];
 
-    const messages = [
-      { role: "system", content: systemPrompt },
-      ...history.slice(-6).map((h) => ({ role: h.role, content: h.content })),
-      { role: "user", content: message },
-    ];
-
     // ── Streaming response ────────────────────────────────────────────────────
     const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
