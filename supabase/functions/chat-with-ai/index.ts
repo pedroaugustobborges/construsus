@@ -249,7 +249,10 @@ function extractKeywords(query: string): string[] {
 
 function fmtBRL(v: number | null): string {
   if (v === null || v === undefined) return "N/D";
-  return `R$ ${Number(v).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
+  const n = Number(v).toFixed(2);
+  const [int, dec] = n.split(".");
+  const intFmt = int.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return `R$ ${intFmt},${dec}`;
 }
 
 async function searchStructuredTables(

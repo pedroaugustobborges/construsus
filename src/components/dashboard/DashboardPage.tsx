@@ -21,7 +21,7 @@ import {
   TrendingUp,
   Construction,
   LibraryBooks,
-  AutoAwesome,
+  SmartToy,
   ArrowForward,
   CalendarToday,
   Update,
@@ -99,7 +99,7 @@ export function DashboardPage() {
     {
       title: 'Nova Consulta IA',
       description: 'Faça perguntas sobre normas, custos e planejamento',
-      icon: <AutoAwesome />,
+      icon: <SmartToy />,
       color: 'primary',
       onClick: () => navigate('/chat'),
     },
@@ -207,7 +207,7 @@ export function DashboardPage() {
           <Card sx={{ mt: 3, border: '1px solid', borderColor: 'primary.light', background: 'linear-gradient(135deg, rgba(0,97,155,0.04) 0%, rgba(0,135,90,0.04) 100%)' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                <AutoAwesome sx={{ color: 'primary.main', fontSize: 18 }} />
+                <SmartToy sx={{ color: 'primary.main', fontSize: 18 }} />
                 <Typography variant="subtitle2" fontWeight={600} color="primary.main">
                   Sugestão de Consulta
                 </Typography>

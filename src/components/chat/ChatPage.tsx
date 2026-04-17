@@ -28,7 +28,7 @@ import {
   Add,
   Delete,
   Chat as ChatIcon,
-  AutoAwesome,
+  SmartToy,
 } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
 import { useConversations, useMessages } from '@/hooks/useConversations';
@@ -288,7 +288,7 @@ export function ChatPage() {
             gap: 1,
           }}
         >
-          <AutoAwesome sx={{ color: 'primary.main', fontSize: 20 }} />
+          <SmartToy sx={{ color: 'primary.main', fontSize: 20 }} />
           <Typography variant="subtitle1" fontWeight={600}>
             {conversations.find(c => c.id === activeConvId)?.title ?? 'ConstruSUS IA'}
           </Typography>
@@ -452,7 +452,7 @@ function WelcomeScreen({
           justifyContent: 'center',
         }}
       >
-        <AutoAwesome sx={{ fontSize: 36, color: 'white' }} />
+        <SmartToy sx={{ fontSize: 36, color: 'white' }} />
       </Box>
 
       <Box>

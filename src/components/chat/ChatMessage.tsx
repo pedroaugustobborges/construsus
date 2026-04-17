@@ -10,7 +10,7 @@ import {
   Alert,
 } from '@mui/material';
 import {
-  AutoAwesome,
+  SmartToy,
   Person,
   ContentCopy,
   Check,
@@ -40,7 +40,7 @@ export function ChatMessage({ message, isLoading }: ChatMessageProps) {
     return (
       <Box sx={{ display: 'flex', gap: 1.5, mb: 3, alignItems: 'flex-start' }}>
         <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36 }}>
-          <AutoAwesome sx={{ fontSize: 18 }} />
+          <SmartToy sx={{ fontSize: 18 }} />
         </Avatar>
         <Box sx={{ flex: 1, maxWidth: 700 }}>
           <Skeleton variant="text" width="65%" height={20} sx={{ mb: 0.5 }} />
@@ -72,7 +72,7 @@ export function ChatMessage({ message, isLoading }: ChatMessageProps) {
         {isUser ? (
           <Person sx={{ fontSize: 18 }} />
         ) : (
-          <AutoAwesome sx={{ fontSize: 18 }} />
+          <SmartToy sx={{ fontSize: 18 }} />
         )}
       </Avatar>
 
